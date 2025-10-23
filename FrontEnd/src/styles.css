@@ -15,6 +15,7 @@ body{
 
 h2{
     color: #333333;
+    cursor: default;
 }
 
 p{

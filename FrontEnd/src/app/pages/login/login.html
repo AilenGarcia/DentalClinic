@@ -2,15 +2,25 @@
     <img src="logo.png" alt="logo" class="logo-login">
     <h2>Iniciar Sesión</h2>
 
-    <form>
+    <form [formGroup]="form"  (ngSubmit)="handleSubmit()">
         <div class="div-input">
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" />
+            <div class="head-input">
+                <label for="email">Email</label>
+                @if(email.hasError('required') && (email.dirty || email.touched)){
+                    <span>*El email es requerido</span>
+                }
+            </div>
+            <input type="email" name="email" id="email" formControlName="email"/>
         </div>
 
         <div class="div-input">
-            <label for="pass">Contraseña</label>
-            <input type="password" name="pass" id="pass" />
+            <div class="head-input">
+                <label for="password">Contraseña</label>
+                @if(password.hasError('required') && (password.dirty || password.touched)){
+                    <span>*La contraseña es requerida</span>
+                }
+            </div>
+            <input type="password" name="password" id="password" formControlName="password"/>
         </div>
 
         <div class="div-actions">
@@ -18,7 +28,7 @@
                 <span>¿No tenés cuenta?</span>
                 <a href="#">Crear cuenta</a>
             </div>
-            <button class="submit" type="submit">Iniciar</button>
+            <button class="submit" type="submit" [disabled]="form.invalid">Iniciar</button>
         </div>
     </form>
 </div>
