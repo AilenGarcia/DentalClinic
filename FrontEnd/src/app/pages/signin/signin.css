@@ -1,0 +1,145 @@
+.container-singin {
+    width: 40vw;
+    min-height: 80vh;
+    background-color: #ffffff;
+    border: 2px solid #2DB2EB;
+    border-radius: 16px;
+    box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 2rem;
+}
+
+.type-user{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-top: 1.5rem;
+}
+
+.type-user div{
+    display: flex;
+    width: 9vw;
+}
+
+.type-user input{
+    height: 3vh;
+}
+
+form{
+    width: 85%;
+}
+
+label {
+    font-size: 16px;
+    color: #454545;
+}
+
+.div-input {
+    display: flex;
+    flex-direction: column;
+}
+
+.div-input label {
+    padding-bottom: 0.5rem;
+}
+
+input {
+    height: 5.5vh;
+    width: 100%;
+    border: 1px solid #666666;
+    border-radius: 5px;
+}
+
+.div-actions {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column-reverse;
+}
+
+.submit {
+    background-color: #0064A2;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.9rem;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.submit:hover {
+    background-color: #2DB2EB;
+}
+
+.register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: #333333;
+}
+
+.register span {
+    color: #555555;
+}
+
+.register a {
+    color: #0064A2;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.register a:hover {
+    color: #2DB2EB;
+    transform: translateY(-1px);
+}
+
+button.submit:disabled {
+    background-color: #2DB2EB;
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.head-input {
+    padding-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+span {
+    cursor: default;
+    padding-bottom: 0.5rem;
+    font-size: 12px;
+    color: red;
+}
+
+.div-actions span {
+    padding-bottom: 0;
+}
+
+@media (max-width: 1024px) {
+    .container-singin {
+        width: 60vw;
+    }
+}
+
+@media (max-width: 768px) {
+    .container-singin {
+        width: 95vw;
+        padding: 2rem 1.5rem;
+    }
+    .type-user div{
+    width: 25vw
+    }
+}
