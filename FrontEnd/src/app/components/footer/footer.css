@@ -1,7 +1,7 @@
 :host{
     display: flex;
     justify-content: center;
-    color: rgb(109, 109, 109);
+    color: rgb(48, 48, 48);
     box-shadow: 6px -4px 12px rgba(0, 0, 0, 0.25);
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     padding: 1rem;

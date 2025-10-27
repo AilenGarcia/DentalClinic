@@ -61,6 +61,7 @@
    text-decoration: none;
    color: #555;
    font-weight: 400;
+   transition: all 0.4s ease;
  }
  
  .nav-link:hover {
@@ -96,12 +97,19 @@
  }
  
  .btn-primary {
-   background: #434343;
+   background: #0064A2;
    color: #fff;
    transition: all 0.3s ease;
+   border: none;
  }
  
  .btn-primary:hover {
-   background: #8e8e8e;
+   background: #2DB2EB;
  }
+
+@media(max-width: 700px){
+  .logo-text{
+    display: none;
+  }
+}
  

@@ -1,9 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+.contenedor{
+  background-color: #F8FAFB;
+  padding-bottom: 10rem;
+}
+
+h2{
+    display: flex;
+    justify-content: center;
+    font-family: 'Roboto', sans-serif;
+    color: rgb(109, 109, 109);
+    margin: 0;
+    padding: 5rem;
+}
+
 .carousel {
     position: relative;
     width: 60%;
     height: 80vh;
     overflow: hidden;
-    margin: 5rem auto;
+    margin: 0 auto;
   }
   
   .carousel-inner {
@@ -38,11 +54,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: all 0.4s ease;
   }
   
   .carousel-control-prev:hover,
   .carousel-control-next:hover {
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.2);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); /* difumina alrededor */
   }
   
   .carousel-control-prev {
