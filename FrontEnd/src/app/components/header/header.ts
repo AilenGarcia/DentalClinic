@@ -3,7 +3,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 //import { AuthService } from '../auth/auth-service';
 
 @Component({
-  selector: 'header',
+  selector: 'app-header',
   imports: [RouterLink, RouterLinkActive],
   templateUrl: './header.html',
   styleUrl: './header.css'
