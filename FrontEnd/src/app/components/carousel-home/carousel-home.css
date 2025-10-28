@@ -2,7 +2,8 @@
 
 .contenedor{
   background-color: #F8FAFB;
-  padding-bottom: 10rem;
+  padding-bottom: 7rem;
+  padding-top: 1rem;
 }
 
 h2{
@@ -11,13 +12,13 @@ h2{
     font-family: 'Roboto', sans-serif;
     color: rgb(109, 109, 109);
     margin: 0;
-    padding: 5rem;
+    padding: 3rem;
 }
 
 .carousel {
     position: relative;
     width: 60%;
-    height: 80vh;
+    height: 70vh;
     overflow: hidden;
     margin: 0 auto;
   }
@@ -90,9 +91,14 @@ h2{
     transform: rotate(-45deg);
   }
 
-  @media (max-width: 950px) {
+  @media (max-width: 768px) {
     .carousel{
       width: 75%;
     }
+
+    h2{
+      text-align: center;
+    }
+
   }
   

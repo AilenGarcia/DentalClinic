@@ -23,6 +23,7 @@
     flex-direction: column;
     justify-content: center; /* centra verticalmente el contenido */
     gap: 3rem;
+    width: 45vw
 }
 
 h2{
@@ -30,51 +31,14 @@ h2{
     font-weight: 800;
     line-height: 1.1;
     margin: 0;
+    color: rgb(237, 235, 235);
 }
 
 p{
-    font-size: 2rem;
+    font-size: 1.6rem;
     margin: 0;
-}
-
-.botones{
-    display: flex;
-    gap: 1rem;
-}
-
-.btn-primary {
-    background: #FFB703;
-    color: #0D0D0D;
-    border: none;
-    padding: 0.9rem 2rem;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-primary:hover {
-    background-color: #FFA600; 
-    transform: translateY(-2px); /* efecto flotante */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-  
-.btn-secondary {
-    background-color: #00E0FF;
-    color: #001F5C;
-    border: none;
-    padding: 0.9rem 2rem;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-secondary:hover {
-    background-color: #00C8E0;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(255, 255, 255, 0.3);
+    color: rgb(237, 235, 235);
+    line-height: 1.5;
 }
 
 .hero-image{
