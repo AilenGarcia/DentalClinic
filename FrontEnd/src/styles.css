@@ -5,9 +5,9 @@
 }
 
 body{
+    width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
     min-height: 100vh;
     background-color: #F8FAFB;
     font-family: 'Poppins', sans-serif;

@@ -6,6 +6,7 @@ import { Login } from './pages/login/login';
 import { Home } from './pages/home/home';
 import { MainLayout } from './layouts/main-layout/main-layout';
 import { AuthLayout } from './layouts/auth-layout/auth-layout';
+import { Edit } from './pages/edit/edit';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -25,6 +26,11 @@ export const routes: Routes = [
                 path: 'odontologos',
                 component: Odontologos,
                 title: 'Listado de odontólogos'
+            },
+            {
+                path: 'edit',
+                component: Edit,
+                title: 'Modificar perfil'
             }
         ]
     },
