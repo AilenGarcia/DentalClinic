@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
-import { Turnos } from './pages/turnos/turnos';
 import { Odontologos } from './pages/odontologos/odontologos';
 import { Signin } from './pages/signin/signin';
 import { Login } from './pages/login/login';
 import { Home } from './pages/home/home';
 import { MainLayout } from './layouts/main-layout/main-layout';
 import { AuthLayout } from './layouts/auth-layout/auth-layout';
+import { TurnosPaciente } from './pages/turnos/listados/turnos-paciente/turnos-paciente';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -18,8 +18,8 @@ export const routes: Routes = [
             },
             {
                 path: 'turnos',
-                component: Turnos,
-                title: 'Agendar turno'
+                component: TurnosPaciente,
+                title: 'Listado de turnos'
             },
             {
                 path: 'odontologos',

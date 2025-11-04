@@ -1,0 +1,57 @@
+<div class="container">
+    <h1>Mis Turnos Médicos</h1>
+    <p class="sub">Consulta y gestiona tus citas médicas</p>
+    
+    <div class="card">
+        <h2>Lista de Turnos</h2>
+        <div class="filters">
+            <div class="form-group">
+                <label>Odontólogo</label>
+                <select [(ngModel)]="filtroOdontologo" (change)="aplicarFiltros()">
+                    <option value="">Todos los odontólogos</option>
+                    @for (odontologo of odontologos; track odontologo.id) {
+                        <option [value]="odontologo.id">{{odontologo.nombre + " " + odontologo.apellido}}</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Fecha</label>
+                <input type="date" lang="es-AR" [(ngModel)]="filtroFecha" (change)="aplicarFiltros()" />
+            </div>
+            <button class="clear" (click)="limpiarFiltros()">Limpiar Filtros</button>
+        </div>
+    </div>
+
+    @if (turnosPaginados.length > 0) {
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>ID.</th>
+                    <th>Fecha</th>
+                    <th>Odontólogo</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (t of turnosPaginados; track t.id) {
+                    <tr>
+                        <td>{{ t.id }}</td>
+                        <td>{{ t.fechaTurno | date:'MM/dd/yyyy' }}</td>
+                        <td>{{ t.odontologo.nombre }} {{ t.odontologo.apellido }}</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="paginacion">
+            <button (click)="paginaAnterior()" [disabled]="currentPage === 1">Anterior</button>
+            <span>Página {{currentPage}} de {{totalPages}}</span>
+            <button (click)="paginaSiguiente()" [disabled]="currentPage === totalPages">Siguiente</button>
+        </div>
+    } @else {
+        <div class="loading">
+            <span class="spinner"></span> Cargando turnos...
+        </div>
+    }
+
+    <button class="btn-nuevo">Agregar Nuevo Turno</button>
+</div>
