@@ -1,5 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalPassword } from '../../components/modal-password/modal-password';
 
 @Component({
   selector: 'app-edit-paciente',
@@ -9,6 +11,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 })
 export class EditPaciente {
   private readonly formBuilder = inject(FormBuilder);
+  private readonly modalDialog = inject(MatDialog)
 
   protected readonly form = this.formBuilder.nonNullable.group({
     nombre: ['', Validators.required],
@@ -41,6 +44,13 @@ export class EditPaciente {
 
     get domicilio(){
     return this.form.controls.nombre;
+  }
+
+  openModal(){
+    const dialogRef = this.modalDialog.open(ModalPassword)
+    dialogRef.afterClosed().subscribe(()=>{
+      console.log('hola')
+    })
   }
 
   handleSubmit(){
