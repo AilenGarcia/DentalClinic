@@ -6,7 +6,8 @@ import { Login } from './pages/login/login';
 import { Home } from './pages/home/home';
 import { MainLayout } from './layouts/main-layout/main-layout';
 import { AuthLayout } from './layouts/auth-layout/auth-layout';
-import { Edit } from './pages/edit/edit';
+import { EditPaciente } from './pages/edit-paciente/edit-paciente';
+import { EditOdontologo } from './pages/edit-odontologo/edit-odontologo';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -29,7 +30,12 @@ export const routes: Routes = [
             },
             {
                 path: 'edit',
-                component: Edit,
+                component: EditPaciente,
+                title: 'Modificar perfil'
+            },
+            {
+                path: 'editOdontologo',
+                component: EditOdontologo,
                 title: 'Modificar perfil'
             }
         ]
