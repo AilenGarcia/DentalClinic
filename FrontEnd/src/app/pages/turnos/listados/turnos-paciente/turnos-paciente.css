@@ -1,0 +1,325 @@
+/* turnos-paciente.css */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 8px 0;
+  }
+  
+  .sub {
+    font-size: 1.125rem;
+    color: #6b7280;
+    margin: 0 0 40px 0;
+  }
+  
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 32px;
+  }
+  
+  .card h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 24px 0;
+  }
+  
+  .filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    align-items: end;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .form-group label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+  }
+  
+  .form-group select,
+  .form-group input[type="date"] {
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #1a1a1a;
+    background: white;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  
+  .form-group select:hover,
+  .form-group input[type="date"]:hover {
+    border-color: #9ca3af;
+  }
+  
+  .form-group select:focus,
+  .form-group input[type="date"]:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+  
+  .clear {
+    padding: 10px 20px;
+    background: white;
+    color: #6b7280;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    height: fit-content;
+  }
+  
+  .clear:hover {
+    background: #f9fafb;
+    border-color: #9ca3af;
+  }
+  
+  /* Estilos para la tabla */
+  .tabla {
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-collapse: collapse;
+    margin-bottom: 24px;
+  }
+  
+  .tabla thead {
+    background: #f9fafb;
+  }
+  
+  .tabla thead tr {
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .tabla th {
+    padding: 16px 24px;
+    text-align: left;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .tabla tbody tr {
+    border-bottom: 1px solid #f3f4f6;
+    transition: background 0.2s;
+  }
+  
+  .tabla tbody tr:last-child {
+    border-bottom: none;
+  }
+  
+  .tabla tbody tr:hover {
+    background: #f9fafb;
+  }
+  
+  .tabla td {
+    padding: 16px 24px;
+    font-size: 0.9375rem;
+    color: #1a1a1a;
+  }
+  
+  /* Estado de carga */
+  .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    color: #6b7280;
+    font-size: 1rem;
+    margin-bottom: 32px;
+  }
+  
+  .spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid #e5e7eb;
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Paginación */
+  .paginacion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 32px;
+  }
+  
+  .paginacion button {
+    padding: 10px 20px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 100px;
+  }
+  
+  .paginacion button:hover:not(:disabled) {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+  }
+  
+  .paginacion button:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  
+  .paginacion button:disabled {
+    background: #e5e7eb;
+    color: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  
+  .paginacion span {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: #374151;
+    min-width: 120px;
+    text-align: center;
+  }
+  
+  /* Botón principal */
+  .btn-nuevo {
+    padding: 12px 24px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .btn-nuevo:hover {
+    background: #1d4ed8;
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+    transform: translateY(-1px);
+  }
+  
+  .btn-nuevo:active {
+    transform: translateY(0);
+  }
+  
+  /* Responsive - Tablets */
+  @media (max-width: 768px) {
+    .filters {
+      grid-template-columns: 1fr;
+    }
+  
+    h1 {
+      font-size: 2rem;
+    }
+  
+    .card {
+      padding: 20px;
+    }
+  
+    .tabla th,
+    .tabla td {
+      padding: 12px 16px;
+      font-size: 0.875rem;
+    }
+  
+    .tabla th {
+      font-size: 0.75rem;
+    }
+  }
+  
+  /* Responsive - Móviles */
+  @media (max-width: 640px) {
+    .container {
+      padding: 20px 16px;
+    }
+  
+    h1 {
+      font-size: 1.75rem;
+    }
+  
+    .sub {
+      font-size: 1rem;
+    }
+  
+    .card {
+      padding: 16px;
+    }
+  
+    .tabla {
+      font-size: 0.875rem;
+    }
+  
+    .tabla th,
+    .tabla td {
+      padding: 10px 12px;
+    }
+  
+    .paginacion {
+      gap: 12px;
+      padding: 16px;
+    }
+  
+    .paginacion button {
+      padding: 8px 16px;
+      font-size: 0.875rem;
+      min-width: 80px;
+    }
+  
+    .paginacion span {
+      font-size: 0.875rem;
+      min-width: 100px;
+    }
+  
+    .btn-nuevo {
+      width: 100%;
+    }
+  }

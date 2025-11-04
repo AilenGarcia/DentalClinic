@@ -4,6 +4,15 @@
     box-sizing: border-box;
 }
 
+app-root{
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+header 
+/*Poner header solo sin corchetes hace que se vaya para arriba solito, no entiendo por que pero por ahora lo dejo asi*/
+
 body{
     width: 100%;
     display: flex;
