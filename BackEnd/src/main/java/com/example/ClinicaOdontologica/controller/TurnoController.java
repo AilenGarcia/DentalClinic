@@ -42,4 +42,15 @@ public class TurnoController {
         return new ResponseEntity<>("Turno eliminado con exito", null, HttpStatus.OK);
     }
 
+    @GetMapping("/buscarPorOdontologo/{id}")
+    public ResponseEntity<List<Turno>> buscarPorOdontologo(@PathVariable Integer id) throws NotFoundException {
+        return new ResponseEntity<>(turnoService.buscarPorOdontologo(id), null, HttpStatus.OK);
+    }
+
+    @GetMapping("/buscarPorPaciente/{id}")
+    public ResponseEntity<List<Turno>> buscarPorPaciente(@PathVariable Integer id) throws NotFoundException {
+        return new ResponseEntity<>(turnoService.buscarPorPaciente(id), null, HttpStatus.OK);
+    }
+
+
 }

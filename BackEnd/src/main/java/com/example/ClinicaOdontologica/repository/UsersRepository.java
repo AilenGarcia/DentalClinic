@@ -8,5 +8,7 @@ import org.springframework.data.repository.query.Param;
 public interface UsersRepository extends JpaRepository<Users, Integer> {
     @Query(value= "select * from users where email=?1", nativeQuery = true)
     Users findByEmail (@Param("email") String email);
+
+    Boolean existsUsersByEmail (@Param("email") String email);
 }
 

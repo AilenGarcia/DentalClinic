@@ -14,9 +14,9 @@ header
 /*Poner header solo sin corchetes hace que se vaya para arriba solito, no entiendo por que pero por ahora lo dejo asi*/
 
 body{
+    width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
     min-height: 100vh;
     background-color: #F8FAFB;
     font-family: 'Poppins', sans-serif;
@@ -31,3 +31,5 @@ p{
     font-size: 16px;
     color: #666666;
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

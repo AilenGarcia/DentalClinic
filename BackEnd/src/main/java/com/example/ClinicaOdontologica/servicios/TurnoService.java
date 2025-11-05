@@ -19,13 +19,30 @@ public class TurnoService {
     public void eliminarTurno(Integer id) throws NotFoundException {
         if(buscar(id) == null) throw new NotFoundException("No se puede eliminar un turno inexistente");
         turnoRepository.deleteById(id);}
+
     public Turno buscar(Integer id)throws NotFoundException{
         return turnoRepository.findById(id).orElseThrow(() -> new NotFoundException("turno no encontrado"));}
+
     public void agregarTurno(Turno turno) throws ExistenteException, BadRequestException {
         if(Objects.isNull(turno.getFechaTurno())) throw new BadRequestException("El campo fecha esta vacio");
         if(turnoRepository.exists(Example.of(turno))) throw new ExistenteException("El turno ya esta registrado");
         turnoRepository.save(turno);}
+
     public List<Turno> listar(){return turnoRepository.findAll();}
 
+    public List<Turno> buscarPorOdontologo(Integer id) throws NotFoundException{
+        List<Turno> turnos =  turnoRepository.findByOdontologo(id);
+        if (turnos.isEmpty()) {
+            throw new NotFoundException("No hay turnos para el paciente con ID: " + id);
+        }
+        return turnos;
+    }
 
+    public List<Turno> buscarPorPaciente(Integer id) throws NotFoundException {
+        List<Turno> turnos = turnoRepository.findByPaciente(id);
+        if (turnos.isEmpty()) {
+            throw new NotFoundException("No hay turnos para el paciente con ID: " + id);
+        }
+        return turnos;
+    }
 }

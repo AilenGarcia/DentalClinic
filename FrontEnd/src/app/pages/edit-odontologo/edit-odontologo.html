@@ -1,0 +1,73 @@
+<div class="container-edit">
+    <h2>Modificar Perfil</h2>
+    <form [formGroup]="form" (ngSubmit)="handleSubmit()">
+        <section class="formulario">
+            <section class="section">
+                <div class="div-input">
+                    <div class="head-input">
+                        <label for="nombre">Nombre</label>
+                        @if(nombre.hasError('required') && (nombre.dirty || nombre.touched)){
+                        <span>*El nombre es requerido</span>
+                        }
+                    </div>
+                    <input type="text" name="nombre" id="nombre" formControlName="nombre">
+                </div>
+
+                <div class="div-input">
+                    <div class="head-input">
+                        <label for="apellido">Apellido</label>
+                        @if(apellido.hasError('required') && (apellido.dirty || apellido.touched)){
+                        <span>*El apellido es requerido</span>
+                        }
+                    </div>
+                    <input type="text" name="apellido" id="apellido" formControlName="apellido">
+                </div>
+
+                <div class="div-input">
+                    <div class="head-input">
+                        <label for="email">Email</label>
+                        @if(email.dirty || email.touched){
+                        @if(email.hasError('required')){
+                        <span>*El email es requerido</span>
+                        } @else if(email.hasError('email')){
+                        <span>*El formato de email es incorrecto</span>
+                        }
+                        }
+                    </div>
+                    <input type="email" name="email" id="email" formControlName="email" />
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="div-input">
+                    <div class="head-input">
+                        <label for="matricula">Matricula</label>
+                        @if((matricula.dirty || matricula.touched)){
+                        @if(matricula.hasError('required')){
+                        <span>*El matricula es requerido</span>
+                        } @else if (matricula.hasError('minLength')) {
+                        <span>*Ingrese una matricula válida</span>
+                        }
+                        }
+                    </div>
+                    <input type="text" name="matricula" id="matricula" formControlName="matricula">
+                </div>
+
+                <div class="div-textarea">
+                    <div class="head-input">
+                        <label for="descripcion">Descripción</label>
+                        @if( descripcion.hasError('required') && (descripcion.dirty || descripcion.touched)){
+                        <span>*La descripción es requerida</span>
+                        }
+                    </div>
+                </div>
+                <textarea name="descripcion" id="descripcion" formControlName="descripcion"></textarea>
+            </section>
+        </section>
+
+        <div class="div-actions">
+            <button class="editPass" (click)="openModal()"> Modificar Contraseña</button>
+            <button class="submit" type="submit" [disabled]="form.invalid">Actualizar Datos</button>
+        </div>
+    </form>
+</div>

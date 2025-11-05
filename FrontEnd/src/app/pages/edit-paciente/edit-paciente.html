@@ -1,0 +1,89 @@
+<div class="container-edit">
+    <h2>Modificar Perfil</h2>
+    <form [formGroup]="form" (ngSubmit)="handleSubmit()">
+        <section class="formulario">
+            <section class="section">
+                <div class="div-input">
+                    <div class="head-input">
+                        <label for="nombre">Nombre</label>
+                        @if(nombre.hasError('required') && (nombre.dirty || nombre.touched)){
+                        <span>*El nombre es requerido</span>
+                        }
+                    </div>
+                    <input type="text" name="nombre" id="nombre" formControlName="nombre">
+                </div>
+
+                <div class="div-input">
+                    <div class="head-input">
+                        <label for="apellido">Apellido</label>
+                        @if(apellido.hasError('required') && (apellido.dirty || apellido.touched)){
+                        <span>*El apellido es requerido</span>
+                        }
+                    </div>
+                    <input type="text" name="apellido" id="apellido" formControlName="apellido">
+                </div>
+
+                <div class="div-input">
+                    <div class="head-input">
+                        <label for="email">Email</label>
+                        @if(email.dirty || email.touched){
+                        @if(email.hasError('required')){
+                        <span>*El email es requerido</span>
+                        } @else if(email.hasError('email')){
+                        <span>*El formato de email es incorrecto</span>
+                        }
+                        }
+                    </div>
+                    <input type="email" name="email" id="email" formControlName="email" />
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="div-input">
+                    <div class="head-input">
+                        <label for="telefono">Teléfono</label>
+                        @if((telefono.dirty || telefono.touched)){
+                        @if(telefono.hasError('required')){
+                        <span>*El telefono es requerido</span>
+                        } @else if (telefono.hasError('minLength')) {
+                        <span>*Ingrese un telefono válido</span>
+                        }
+                        }
+                    </div>
+                    <input type="text" name="telefono" id="telefono" formControlName="telefono">
+                </div>
+
+                <div class="div-input">
+                    <div class="head-input">
+                        <label for="domicilio">Domicilio</label>
+                        @if((domicilio.dirty || domicilio.touched)){
+                        @if(domicilio.hasError('required')){
+                        <span>*El domicilio es requerido</span>
+                        }
+                        }
+                    </div>
+                    <input type="text" name="domicilio" id="domicilio" formControlName="domicilio">
+                </div>
+
+                <div class="div-input">
+                    <div class="head-input">
+                        <label for="dni">DNI</label>
+                        @if((dni.dirty || dni.touched)){
+                        @if(dni.hasError('required')){
+                        <span>*El dni es requerido</span>
+                        } @else if (dni.hasError('minLength')) {
+                        <span>*Ingrese un dni válido</span>
+                        }
+                        }
+                    </div>
+                    <input type="text" name="dni" id="dni" formControlName="dni">
+                </div>
+            </section>
+        </section>
+
+        <div class="div-actions">
+            <button class="editPass" (click)="openModal()"> Modificar Contraseña</button>
+            <button class="submit" type="submit" [disabled]="form.invalid">Actualizar Datos</button>
+        </div>
+    </form>
+</div>

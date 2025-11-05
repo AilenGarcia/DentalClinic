@@ -1,7 +1,9 @@
 package com.example.ClinicaOdontologica.entidades;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -9,6 +11,8 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Turno {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
@@ -17,8 +21,8 @@ public class Turno {
     private LocalDate fechaTurno;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "users_id")
-    private Users users;
+    @JoinColumn(name = "paciente_id")
+    private Paciente paciente;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "odontologo_id")
