@@ -1,4 +1,4 @@
-package com.example.ClinicaOdontologica.entidades;
+package com.example.ClinicaOdontologica.model.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.Date;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,18 +16,17 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Paciente {
+public class Odontologo {
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
     private String telefono;
-    private String domicilio;
-    private String dni;
-    private Date fechaDeAlta;
+    private String matricula;
+    private String descripcion;
 
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "odontologo_id")
     @JsonBackReference
     private Set<Turno> turnos = new HashSet<>();
 

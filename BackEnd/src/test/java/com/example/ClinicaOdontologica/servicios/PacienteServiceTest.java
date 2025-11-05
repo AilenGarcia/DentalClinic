@@ -1,17 +1,10 @@
 package com.example.ClinicaOdontologica.servicios;
 
-import com.example.ClinicaOdontologica.entidades.Paciente;
-import com.example.ClinicaOdontologica.exception.ExistenteException;
 import com.example.ClinicaOdontologica.exception.NotFoundException;
-import com.example.ClinicaOdontologica.exception.BadRequestException;
-import com.example.ClinicaOdontologica.repository.OdontologoRepository;
 import com.example.ClinicaOdontologica.repository.PacienteRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;

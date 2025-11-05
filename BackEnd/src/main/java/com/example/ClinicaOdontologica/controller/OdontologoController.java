@@ -1,59 +1,85 @@
 package com.example.ClinicaOdontologica.controller;
 
-import com.example.ClinicaOdontologica.entidades.Odontologo;
-import com.example.ClinicaOdontologica.exception.ExistenteException;
+import com.example.ClinicaOdontologica.model.entity.Odontologo;
 import com.example.ClinicaOdontologica.exception.NotFoundException;
-import com.example.ClinicaOdontologica.exception.BadRequestException;
 import com.example.ClinicaOdontologica.servicios.OdontologoService;
-import jakarta.transaction.Transactional;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Odontologos", description = "Operaciones relacionadas con los odontologos")
 @RestController
-@CrossOrigin(origins = "*")
 @AllArgsConstructor
-@RequestMapping(value = "/odontologos")
+@RequestMapping(value = "/api/odontologos")
 public class OdontologoController {
     private OdontologoService odontologoService;
 
-    @GetMapping("/mostrar")
+    /**
+     * Función para listar odontologos.
+     * @return Respuesta HTTP con una lista de odontologos.
+     */
+    @Operation(summary = "Listar odontologos", description = "Lista los odontologos de la base de datos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",description = "Odontologos listados exitosamente"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasAuthority('ROLE_PACIENTES')")
+    @GetMapping("/list")
     public ResponseEntity<List<Odontologo>> listar() {
         if(odontologoService.listar().isEmpty()) return new ResponseEntity<>(null,null,HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(odontologoService.listar(),null,HttpStatus.OK);
     }
 
-    @GetMapping("/buscar/{id}")
+    /**
+     * Función para obtener un odontologo por su ID.
+     * @param id del odontologo a buscar.
+     * @return Respuesta HTTP con el odontologo encontrado.
+     * @throws NotFoundException Si no se encuentra el odontologo con el ID proporcionado.
+     */
+    @Operation(summary = "Obtener un odontologo por ID", description = "Recibe un ID y devuelve el odontologo correspondiente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",description = "Devuelve el odontologo correspondiente"),
+            @ApiResponse(responseCode = "404", description = "No se encontró el odontologo con el ID proporcionado"),
+            @ApiResponse(responseCode = "400", description = "Error en los datos proporcionados"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasAnyAuthority('ROLE_ODONTOLOGOS', 'ROLE_PACIENTES')")
+    @GetMapping("/findBy/{id}")
     public ResponseEntity<Odontologo> buscar(@PathVariable Integer id) throws NotFoundException {
         return new ResponseEntity<>(odontologoService.buscar(id), null, HttpStatus.OK);
     }
 
-    @GetMapping("/finByName/{nombre}")
-    public ResponseEntity<List<Odontologo>> findByName(@PathVariable String nombre) {
-        return new ResponseEntity<>(odontologoService.findByName(nombre), null, HttpStatus.OK);
-    }
-
-    @PostMapping("/agregar")
-    public ResponseEntity<String> agregar(@RequestBody Odontologo odontologo) throws ExistenteException, NotFoundException, BadRequestException {
-        odontologoService.guardarOdontologo(odontologo);
-        return new ResponseEntity<>("Odontologo agregado correctamente",null, HttpStatus.CREATED);
-    }
-
-    @Transactional
-    @PutMapping("/modificar/{matricula}/{id}")
-    public ResponseEntity<String> modificar(@PathVariable String matricula,@PathVariable Integer id) throws NotFoundException {
-        odontologoService.modificar(matricula, id);
-        return new ResponseEntity<>("Odontologo modificado con exito", null, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<String> eliminar(@PathVariable Integer id) throws NotFoundException {
-
-        odontologoService.eliminarOdontologo(id);
-        return new ResponseEntity<>("Odontologo eliminado con exito", null, HttpStatus.OK);
+    /**
+     * Función para actualizar un odontologo.
+     * @param odontologo con los datos actualizados del odontologo.
+     * @return Respuesta HTTP con un mensaje de éxito.
+     * @throws NotFoundException Si no se encuentra el odontologo con el ID proporcionado.
+     */
+    @Operation(summary = "Actualizar odontologo", description = "Recibe un odontologo y lo actualiza en la base de datos. ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Actualiza el odontologo correspondiente"),
+            @ApiResponse(responseCode = "404", description = "No se encontró el odontologo con el ID proporcionado"),
+            @ApiResponse(responseCode = "400", description = "Error en los datos proporcionados"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasAuthority('ROLE_ODONTOLOGOS')")
+    @PutMapping("/update")
+    public ResponseEntity<String> update(@RequestBody @Valid Odontologo odontologo) throws NotFoundException {
+        odontologoService.update(odontologo);
+        return ResponseEntity.ok("El odontologo se actualizo exitosamente");
     }
 }

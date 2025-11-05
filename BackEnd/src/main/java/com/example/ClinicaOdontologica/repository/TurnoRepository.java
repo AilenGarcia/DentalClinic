@@ -1,6 +1,6 @@
 package com.example.ClinicaOdontologica.repository;
 
-import com.example.ClinicaOdontologica.entidades.Turno;
+import com.example.ClinicaOdontologica.model.entity.Turno;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

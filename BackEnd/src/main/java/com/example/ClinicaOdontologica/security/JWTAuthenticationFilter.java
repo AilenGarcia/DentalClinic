@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
@@ -37,12 +38,17 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         return getAuthenticationManager().authenticate(usernamePat);
     }
 
-    /*MANDA TOKEN POR EL BODY COMO JSON*/
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authResult.getPrincipal();
-        String token = JwtUtil.createToken(userDetails.getName(), userDetails.getUsername());
+
+        String rol = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .findFirst()
+                .orElse("");
+
+        String token = JwtUtil.createToken(userDetails.getName(), userDetails.getUsername(), rol);
 
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("token", token);

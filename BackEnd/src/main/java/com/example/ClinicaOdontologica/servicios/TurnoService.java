@@ -1,6 +1,6 @@
 package com.example.ClinicaOdontologica.servicios;
 
-import com.example.ClinicaOdontologica.entidades.Turno;
+import com.example.ClinicaOdontologica.model.entity.Turno;
 import com.example.ClinicaOdontologica.exception.ExistenteException;
 import com.example.ClinicaOdontologica.exception.NotFoundException;
 import com.example.ClinicaOdontologica.exception.BadRequestException;

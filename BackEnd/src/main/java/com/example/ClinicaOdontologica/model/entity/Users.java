@@ -1,13 +1,9 @@
-package com.example.ClinicaOdontologica.entidades;
+package com.example.ClinicaOdontologica.model.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -22,8 +18,11 @@ public class Users {
     private String nombre;
     private String apellido;
     private String email;
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-    @Enumerated(EnumType.STRING)
+
+    @ManyToOne
+    @JoinColumn(name = "rol_id",nullable = false)
     private Rol rol;
 }
+
