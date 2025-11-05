@@ -6,6 +6,7 @@ import { Home } from './pages/home/home';
 import { MainLayout } from './layouts/main-layout/main-layout';
 import { AuthLayout } from './layouts/auth-layout/auth-layout';
 import { TurnosPaciente } from './pages/turnos/listados/turnos-paciente/turnos-paciente';
+import { TurnosOdontologo } from './pages/turnos/listados/turnos-odontologo/turnos-odontologo';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -17,9 +18,10 @@ export const routes: Routes = [
                 title: 'Dental Clinic'
             },
             {
-                path: 'turnos',
-                component: TurnosPaciente,
-                title: 'Listado de turnos'
+                path: 'turnos', children: [
+                    {path: 'pacientes', component: TurnosPaciente, title: 'Listado de turnos'},
+                    {path: 'odontologos', component: TurnosOdontologo, title: 'Listado de turnos'}
+                ]
             },
             {
                 path: 'odontologos',

@@ -6,12 +6,12 @@
         <h2>Lista de Turnos</h2>
         <div class="filters">
             <div class="form-group">
-                <label>Odontólogo</label>
-                <select [(ngModel)]="filtroOdontologo" (change)="aplicarFiltros()">
-                    <option value="">Todos los odontólogos</option>
-                    @for (odontologo of odontologos; track odontologo.id) {
-                        <option [value]="odontologo.id">
-                            {{odontologo.user.nombre}} {{odontologo.user.apellido}}
+                <label>Pacientes</label>
+                <select [(ngModel)]="filtroPaciente" (change)="aplicarFiltros()">
+                    <option value="">Todos los pacientes</option>
+                    @for (paciente of pacientes; track paciente.id) {
+                        <option [value]="paciente.id">
+                            {{paciente.user.nombre}} {{paciente.user.apellido}}
                         </option>
                     }
                 </select>
@@ -28,18 +28,16 @@
         <table class="tabla">
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Fecha</th>
-                    <th>Odontólogo</th>
+                    <th>Pacientes</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 @for (t of turnosPaginados; track t.id) {
                     <tr>
-                        <td>#{{ t.id }}</td>
                         <td>{{ t.fechaTurno.split('T')[0] }}</td>
-                        <td>{{ t.odontologo?.user?.nombre }} {{ t.odontologo?.user?.apellido }}</td>
+                        <td>{{ t.paciente?.user?.nombre }} {{ t.paciente?.user?.apellido }}</td>
                         <td>
                             <button class="btn-ver" (click)="verDetalles(t)">Ver Detalles</button>
                         </td>
@@ -59,7 +57,7 @@
         </div>
     }
 
-    <button class="btn-nuevo">Agregar Nuevo Turno</button>
+    <button class="btn-imprimir" (click)="imprimirTurnos()">Imprimir listado en PDF</button>
 </div>
 
 <!-- Modal de Detalles del Turno -->

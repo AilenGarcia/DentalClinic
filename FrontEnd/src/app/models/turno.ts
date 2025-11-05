@@ -1,9 +1,9 @@
-import { Odontologo } from "./odontologo";
 import { Paciente } from "./paciente";
+import { Odontologo } from "./odontologo";
 
 export interface Turno {
-    id?: number;
-    fechaTurno: Date;   
-    users?: Paciente;           
-    odontologo: Odontologo;
-  }
+  id?: number;
+  fechaTurno: string;    
+  paciente?: Paciente;
+  odontologo?: Odontologo;
+}

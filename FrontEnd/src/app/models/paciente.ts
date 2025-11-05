@@ -1,8 +1,10 @@
+import { User } from "./user"
+
 export interface Paciente {
-    id?: number;
-    nombre: string;
-    apellido: string;
-    domicilio: string;
-    dni: string;
-    fechaDeAlta: Date;
+    id?: number,
+    telefono: string,
+    domicilio: string,
+    dni: string,
+    fechaDeAlta: string,
+    user: User
 }

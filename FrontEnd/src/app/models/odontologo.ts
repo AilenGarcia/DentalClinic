@@ -1,7 +1,8 @@
+import { User } from "./user";
+
 export interface Odontologo {
-    id?: number;             
-    nombre: string;
-    apellido: string;
-    matricula: string;
-    rol?: string;         
+    id?: number,
+    matricula: string,
+    descripcion: string,
+    user: User
 }
