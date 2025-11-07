@@ -1,8 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ModalPassword } from '../../components/modal-password/modal-password';
-import { MatDialog } from '@angular/material/dialog';
-
+import {MatDialog} from '@angular/material/dialog';
 @Component({
   selector: 'app-edit-odontologo',
   imports: [ReactiveFormsModule],
