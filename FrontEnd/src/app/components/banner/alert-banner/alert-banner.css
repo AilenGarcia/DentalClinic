@@ -1,0 +1,31 @@
+.alert-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem;
+    text-align: center;
+    font-weight: 500;
+    color: white;
+    z-index: 10000;
+    animation: slideDown 0.3s ease-out;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.success {
+    background-color: #6496ba;
+}
+
+.error {
+    background-color: #d95968;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}

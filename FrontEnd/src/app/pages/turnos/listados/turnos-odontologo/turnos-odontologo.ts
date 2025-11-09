@@ -14,7 +14,7 @@ const USER_PACIENTES: User[] = [
     apellido: 'Pérez', 
     email: 'juan.perez@email.com', 
     password: 'pass123', 
-    rol: 'PACIENTE' 
+    rolId: 1
   },
   { 
     id: 2, 
@@ -22,7 +22,7 @@ const USER_PACIENTES: User[] = [
     apellido: 'Gómez', 
     email: 'ana.gomez@email.com', 
     password: 'pass123', 
-    rol: 'PACIENTE' 
+    rolId: 1 
   }
 ];
 
@@ -34,7 +34,7 @@ const USER_ODONTOLOGOS: User[] = [
     apellido: 'Ruiz', 
     email: 'laura.ruiz@clinica.com', 
     password: 'pass123', 
-    rol: 'ODONTOLOGO' 
+    rolId: 2
   },
   { 
     id: 4, 
@@ -42,7 +42,7 @@ const USER_ODONTOLOGOS: User[] = [
     apellido: 'Pérez', 
     email: 'carlos.perez@clinica.com', 
     password: 'pass123', 
-    rol: 'ODONTOLOGO' 
+    rolId: 2 
   }
 ];
 

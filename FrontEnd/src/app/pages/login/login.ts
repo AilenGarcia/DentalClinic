@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-login',
@@ -9,15 +10,16 @@ import { RouterLink } from '@angular/router';
   styleUrl: './login.css'
 })
 export class Login {
-  private readonly formBuilder = inject(FormBuilder)
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly client = inject(AuthService)
 
   protected readonly form = this.formBuilder.nonNullable.group({
-    email: ['', Validators.required],
+    username: ['', Validators.required],
     password: ['', Validators.required]
   })
 
-  get email(){
-    return this.form.controls.email;
+  get username(){
+    return this.form.controls.username;
   }
 
   get password(){
@@ -26,7 +28,7 @@ export class Login {
 
   handleSubmit(){
       const user = this.form.getRawValue();
-      console.log(user);
+      this.client.login(user);
   }
 }
 

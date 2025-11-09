@@ -1,0 +1,7 @@
+<div 
+    *ngIf="alertService.message$ | async as msg" class="alert-banner" 
+    [class.visible]="!!msg" 
+    [class.success]="msg.type === 'success'"
+    [class.error]="msg.type === 'error'">
+    {{ msg.text }}
+</div>

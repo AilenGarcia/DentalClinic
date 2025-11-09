@@ -11,6 +11,4 @@ public class PasswordEncoder {
         return new BCryptPasswordEncoder();
     }
 
-    /*public static void main(String[] args) {
-        System.out.println("Ailen pass: 123456"+new BCryptPasswordEncoder().encode("123456"));}*/
 }
