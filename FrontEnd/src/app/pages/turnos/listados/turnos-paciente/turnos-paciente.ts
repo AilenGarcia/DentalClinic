@@ -1,82 +1,77 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Paciente } from '../../../../models/paciente';
-import { Odontologo } from '../../../../models/odontologo';
-import { Turno } from '../../../../models/turno';
-import { User } from '../../../../models/user';
+import { UserResponse } from '../../../../services/models/user-response';
+import { Paciente } from '../../../../services/models/paciente';
+import { Odontologo } from '../../../../services/models/odontologo';
+import { Turno } from '../../../../services/models/turnos';
+
 
 // Usuarios para Pacientes
-const USER_PACIENTES: User[] = [
+const USER_PACIENTES: UserResponse[] = [
   { 
     id: 1, 
     nombre: 'Juan', 
     apellido: 'Pérez', 
-    email: 'juan.perez@email.com', 
-    password: 'pass123', 
-    rolId: 1 
+    email: 'juan.perez@email.com'
   },
   { 
     id: 2, 
     nombre: 'Ana', 
     apellido: 'Gómez', 
-    email: 'ana.gomez@email.com', 
-    password: 'pass123', 
-    rolId: 1
+    email: 'ana.gomez@email.com'
   }
 ];
 
-// Usuarios para Odontólogos
-const USER_ODONTOLOGOS: User[] = [
+// Usuarios de odontólogos
+const USER_ODONTOLOGOS: UserResponse[] = [
   { 
     id: 3, 
     nombre: 'Laura', 
     apellido: 'Ruiz', 
-    email: 'laura.ruiz@clinica.com', 
-    password: 'pass123', 
-    rolId: 2 
+    email: 'laura.ruiz@clinica.com'
   },
   { 
     id: 4, 
     nombre: 'Carlos', 
     apellido: 'Pérez', 
-    email: 'carlos.perez@clinica.com', 
-    password: 'pass123', 
-    rolId: 2 
+    email: 'carlos.perez@clinica.com'
   }
 ];
 
+// Pacientes
 const PACIENTES: Paciente[] = [
   { 
     id: 1, 
     telefono: '1122334455', 
     domicilio: 'Calle Falsa 123', 
-    dni: '12345678', 
-    fechaDeAlta: '2023-01-01',
-    user: USER_PACIENTES[0]
+    dni: '12345678',
+    users: USER_PACIENTES[0]
   },
   { 
     id: 2, 
     telefono: '2233445566', 
     domicilio: 'Av. Siempre Viva 742', 
-    dni: '87654321', 
-    fechaDeAlta: '2023-02-15',
-    user: USER_PACIENTES[1]
+    dni: '87654321',
+    users: USER_PACIENTES[1]
   }
 ];
 
+// Odontólogos
 const ODONTOLOGOS: Odontologo[] = [
   { 
-    id: 1, 
+    id: '1', 
+    telefono: '1133557799',
     matricula: 'A123', 
     descripcion: 'Especialista en ortodoncia',
-    user: USER_ODONTOLOGOS[0]
+    users: USER_ODONTOLOGOS[0]
   },
   { 
-    id: 2, 
+    id: '2', 
+    telefono: '1144668800',
     matricula: 'B456', 
     descripcion: 'Especialista en endodoncia',
-    user: USER_ODONTOLOGOS[1]
+    users: USER_ODONTOLOGOS[1]
   }
 ];
 
@@ -124,22 +119,21 @@ export class TurnosPaciente implements OnInit {
     this.calcularPaginacion();
   }
 
-  aplicarFiltros() {
+  aplicarFiltros(): void {
     this.turnosFiltrados = this.turnos.filter(turno => {
       const coincideOdontologo =
-        !this.filtroOdontologo || turno.odontologo?.id === +this.filtroOdontologo;
+        !this.filtroOdontologo || String(turno.odontologo?.id) === String(this.filtroOdontologo);
       
-      const coincideFecha = !this.filtroFecha || this.compararFechasSinHora(
-        turno.fechaTurno,
-        this.filtroFecha
-      );
+      const coincideFecha =
+        !this.filtroFecha || this.compararFechasSinHora(turno.fechaTurno, this.filtroFecha);
       
       return coincideOdontologo && coincideFecha;
     });
-    
+  
     this.currentPage = 1;
     this.calcularPaginacion();
   }
+  
 
   private compararFechasSinHora(fecha1: string, fecha2String: string): boolean {
     const f1 = fecha1.split('T')[0];

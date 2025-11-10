@@ -1,93 +1,88 @@
 import { Component, OnInit } from '@angular/core';
-import { Turno } from '../../../../models/turno';
-import { User } from '../../../../models/user';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Paciente } from '../../../../models/paciente';
-import { Odontologo } from '../../../../models/odontologo';
 import printJS from 'print-js';
+import { User } from '../../../../services/models/user';
+import { Paciente } from '../../../../services/models/paciente';
+import { Odontologo } from '../../../../services/models/odontologo';
+import { Turno } from '../../../../services/models/turnos';
+import { UserResponse } from '../../../../services/models/user-response';
 
-const USER_PACIENTES: User[] = [
+const USER_PACIENTES: UserResponse[] = [
   { 
     id: 1, 
     nombre: 'Juan', 
     apellido: 'Pérez', 
-    email: 'juan.perez@email.com', 
-    password: 'pass123', 
-    rolId: 1
+    email: 'juan.perez@email.com'
   },
   { 
     id: 2, 
     nombre: 'Ana', 
     apellido: 'Gómez', 
-    email: 'ana.gomez@email.com', 
-    password: 'pass123', 
-    rolId: 1 
+    email: 'ana.gomez@email.com'
   }
 ];
 
-// Usuarios para Odontólogos
-const USER_ODONTOLOGOS: User[] = [
+const USER_ODONTOLOGOS: UserResponse[] = [
   { 
     id: 3, 
     nombre: 'Laura', 
     apellido: 'Ruiz', 
-    email: 'laura.ruiz@clinica.com', 
-    password: 'pass123', 
-    rolId: 2
+    email: 'laura.ruiz@clinica.com'
   },
   { 
     id: 4, 
     nombre: 'Carlos', 
     apellido: 'Pérez', 
-    email: 'carlos.perez@clinica.com', 
-    password: 'pass123', 
-    rolId: 2 
+    email: 'carlos.perez@clinica.com'
   }
 ];
 
+// Pacientes
 const PACIENTES: Paciente[] = [
   { 
     id: 1, 
     telefono: '1122334455', 
     domicilio: 'Calle Falsa 123', 
-    dni: '12345678', 
-    fechaDeAlta: '2023-01-01',
-    user: USER_PACIENTES[0]
+    dni: '12345678',
+    users: USER_PACIENTES[0]
   },
   { 
     id: 2, 
     telefono: '2233445566', 
     domicilio: 'Av. Siempre Viva 742', 
-    dni: '87654321', 
-    fechaDeAlta: '2023-02-15',
-    user: USER_PACIENTES[1]
+    dni: '87654321',
+    users: USER_PACIENTES[1]
   }
 ];
 
+// Odontólogos
 const ODONTOLOGOS: Odontologo[] = [
   { 
-    id: 1, 
+    id: '1', 
+    telefono: '1133557799',
     matricula: 'A123', 
     descripcion: 'Especialista en ortodoncia',
-    user: USER_ODONTOLOGOS[0]
+    users: USER_ODONTOLOGOS[0]
   },
   { 
-    id: 2, 
+    id: '2', 
+    telefono: '1144668800',
     matricula: 'B456', 
     descripcion: 'Especialista en endodoncia',
-    user: USER_ODONTOLOGOS[1]
+    users: USER_ODONTOLOGOS[1]
   }
 ];
 
+// Turnos
 const TURNOS: Turno[] = [
   { id: 1, fechaTurno: '2025-11-03', paciente: PACIENTES[0], odontologo: ODONTOLOGOS[0] },
   { id: 2, fechaTurno: '2025-11-05', paciente: PACIENTES[1], odontologo: ODONTOLOGOS[1] },
   { id: 3, fechaTurno: '2025-11-07', paciente: PACIENTES[0], odontologo: ODONTOLOGOS[1] },
   { id: 4, fechaTurno: '2025-11-10', paciente: PACIENTES[1], odontologo: ODONTOLOGOS[0] },
-  { id: 5, fechaTurno: '2025-11-07', paciente: PACIENTES[0], odontologo: ODONTOLOGOS[1] },
-  { id: 6, fechaTurno: '2025-11-07', paciente: PACIENTES[0], odontologo: ODONTOLOGOS[1] },
-  { id: 7, fechaTurno: '2025-11-07', paciente: PACIENTES[0], odontologo: ODONTOLOGOS[1] }
+  { id: 5, fechaTurno: '2025-11-12', paciente: PACIENTES[0], odontologo: ODONTOLOGOS[1] },
+  { id: 6, fechaTurno: '2025-11-15', paciente: PACIENTES[0], odontologo: ODONTOLOGOS[1] },
+  { id: 7, fechaTurno: '2025-11-20', paciente: PACIENTES[0], odontologo: ODONTOLOGOS[1] }
 ];
 
 @Component({
@@ -230,9 +225,9 @@ export class TurnosOdontologo implements OnInit {
 
       const turnosParaImprimir = this.turnosFiltrados.map(t => ({
         fecha: t.fechaTurno,
-        nombrePaciente: `${t.paciente?.user.nombre} ${t.paciente?.user.apellido}`,
+        nombrePaciente: `${t.paciente?.users.nombre} ${t.paciente?.users.apellido}`,
         dni: t.paciente?.dni,
-        email: t.paciente?.user.email,
+        email: t.paciente?.users.email,
         telefono: t.paciente?.telefono ?? '—'
       }))
       printJS({

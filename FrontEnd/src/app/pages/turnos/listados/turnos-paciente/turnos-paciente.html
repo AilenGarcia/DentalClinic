@@ -11,7 +11,7 @@
                     <option value="">Todos los odontólogos</option>
                     @for (odontologo of odontologos; track odontologo.id) {
                         <option [value]="odontologo.id">
-                            {{odontologo.user.nombre}} {{odontologo.user.apellido}}
+                            {{odontologo.users.nombre}} {{odontologo.users.apellido}}
                         </option>
                     }
                 </select>
@@ -39,7 +39,7 @@
                     <tr>
                         <td>#{{ t.id }}</td>
                         <td>{{ t.fechaTurno.split('T')[0] }}</td>
-                        <td>{{ t.odontologo?.user?.nombre }} {{ t.odontologo?.user?.apellido }}</td>
+                        <td>{{ t.odontologo.users.nombre }} {{ t.odontologo.users.apellido }}</td>
                         <td>
                             <button class="btn-ver" (click)="verDetalles(t)">Ver Detalles</button>
                         </td>
@@ -89,25 +89,25 @@
                     <div class="detalle-row">
                         <span class="detalle-label">Nombre:</span>
                         <span class="detalle-value">
-                            {{ turnoSeleccionado.paciente?.user?.nombre }} 
-                            {{ turnoSeleccionado.paciente?.user?.apellido }}
+                            {{ turnoSeleccionado.paciente.users.nombre }} 
+                            {{ turnoSeleccionado.paciente.users.apellido }}
                         </span>
                     </div>
                     <div class="detalle-row">
                         <span class="detalle-label">DNI:</span>
-                        <span class="detalle-value">{{ turnoSeleccionado.paciente?.dni }}</span>
+                        <span class="detalle-value">{{ turnoSeleccionado.paciente.dni }}</span>
                     </div>
                     <div class="detalle-row">
                         <span class="detalle-label">Teléfono:</span>
-                        <span class="detalle-value">{{ turnoSeleccionado.paciente?.telefono }}</span>
+                        <span class="detalle-value">{{ turnoSeleccionado.paciente.telefono }}</span>
                     </div>
                     <div class="detalle-row">
                         <span class="detalle-label">Email:</span>
-                        <span class="detalle-value">{{ turnoSeleccionado.paciente?.user?.email }}</span>
+                        <span class="detalle-value">{{ turnoSeleccionado.paciente.users.email }}</span>
                     </div>
                     <div class="detalle-row">
                         <span class="detalle-label">Domicilio:</span>
-                        <span class="detalle-value">{{ turnoSeleccionado.paciente?.domicilio }}</span>
+                        <span class="detalle-value">{{ turnoSeleccionado.paciente.domicilio }}</span>
                     </div>
                 </div>
 
@@ -116,21 +116,21 @@
                     <div class="detalle-row">
                         <span class="detalle-label">Nombre:</span>
                         <span class="detalle-value">
-                            {{ turnoSeleccionado.odontologo?.user?.nombre }} 
-                            {{ turnoSeleccionado.odontologo?.user?.apellido }}
+                            {{ turnoSeleccionado.odontologo.users.nombre }} 
+                            {{ turnoSeleccionado.odontologo.users.apellido }}
                         </span>
                     </div>
                     <div class="detalle-row">
                         <span class="detalle-label">Matrícula:</span>
-                        <span class="detalle-value">{{ turnoSeleccionado.odontologo?.matricula }}</span>
+                        <span class="detalle-value">{{ turnoSeleccionado.odontologo.matricula }}</span>
                     </div>
                     <div class="detalle-row">
                         <span class="detalle-label">Especialidad:</span>
-                        <span class="detalle-value">{{ turnoSeleccionado.odontologo?.descripcion }}</span>
+                        <span class="detalle-value">{{ turnoSeleccionado.odontologo.descripcion }}</span>
                     </div>
                     <div class="detalle-row">
                         <span class="detalle-label">Email:</span>
-                        <span class="detalle-value">{{ turnoSeleccionado.odontologo?.user?.email }}</span>
+                        <span class="detalle-value">{{ turnoSeleccionado.odontologo.users.email }}</span>
                     </div>
                 </div>
             </div>
