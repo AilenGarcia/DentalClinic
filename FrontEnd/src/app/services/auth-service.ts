@@ -1,12 +1,13 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../enviroments/enviroments';
-import { User } from '../models/user';
 import { AlertServices } from './alert-services';
 import { LoginRequest } from './models/login-request';
 import { AuthResponse } from './models/login-response';
 import { catchError, tap, throwError } from 'rxjs';
+import { UserResponse } from './models/user-response';
+import { User } from './models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +15,10 @@ import { catchError, tap, throwError } from 'rxjs';
 export class AuthService {
   private readonly client = inject(HttpClient);
   private readonly router = inject(Router);
-  private readonly alertService = inject(AlertServices)
-  private readonly API_URL = `${environment.apiUrl}`
-  protected readonly userInfo = signal<{ email: string; role: string; userId: number } | null>(null);
+  private readonly alertService = inject(AlertServices);
+  private readonly API_URL = `${environment.apiUrl}`;
+  protected readonly currentUser = signal<UserResponse | null>(null);
+  protected readonly userInfo = signal<AuthResponse | null>(null);
 
 
   register(usuario: User) {
@@ -43,10 +45,20 @@ export class AuthService {
           localStorage.setItem('token', response.accessToken);
           
           this.userInfo.set({
+            accessToken:response.accessToken,
             email: response.email,
             role: response.role,
             userId: response.userId
           });
+
+          this.cargarUsuario(response.email).subscribe({
+          next: (usuario) => {
+            this.currentUser.set(usuario);
+          },
+          error: (err) => {
+            console.error('Error al cargar usuario:', err);
+          }
+        });
 
         }),
         catchError(error => {
@@ -60,7 +72,12 @@ export class AuthService {
           this.redirigirSegunRol(response.role);
         }
       });
+      
   }
+
+private cargarUsuario(email: string) {
+  return this.client.get<UserResponse>(`${this.API_URL}/users/findByEmail/${email}`);
+}
 
   private redirigirSegunRol(role: string) {
     switch(role) {
@@ -91,8 +108,19 @@ export class AuthService {
     return this.userInfo()?.role === role;
   }
 
+  updateCurrentUser(userData: Partial<UserResponse>) {
+  const current = this.currentUser();
+  if (current) {
+    this.currentUser.set({ ...current, ...userData });
+  }
+}
+
   get usuarioInfo() {
     return this.userInfo.asReadonly();
+  }
+
+    get currentUserInfo() {
+    return this.currentUser.asReadonly();
   }
 
   get token() {

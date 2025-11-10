@@ -1,4 +1,5 @@
 <div class="container-edit">
+    <app-alert-banner></app-alert-banner>
     <h2>Modificar Perfil</h2>
     <form [formGroup]="form" (ngSubmit)="handleSubmit()">
         <section class="formulario">
@@ -41,11 +42,26 @@
             <section class="section">
                 <div class="div-input">
                     <div class="head-input">
+                        <label for="telefono">Telefono</label>
+                        @if(telefono.dirty || telefono.touched){
+                            @if(telefono.hasError('required')){
+                                <span>*El numero de telefono es requerido</span>    
+                            } @else if (telefono.hasError('pattern')) {
+                                <span>*El numero de telefono debe contener solo numeros</span> 
+                            }
+                        
+                        }
+                    </div>
+                    <input type="text" name="telefono" id="telefono" formControlName="telefono">
+                </div>
+
+                <div class="div-input">
+                    <div class="head-input">
                         <label for="matricula">Matricula</label>
                         @if((matricula.dirty || matricula.touched)){
                         @if(matricula.hasError('required')){
-                        <span>*El matricula es requerido</span>
-                        } @else if (matricula.hasError('minLength')) {
+                        <span>*La matricula es requerido</span>
+                        } @else if (matricula.hasError('minlength')) {
                         <span>*Ingrese una matricula válida</span>
                         }
                         }
@@ -66,7 +82,7 @@
         </section>
 
         <div class="div-actions">
-            <button class="editPass" (click)="openModal()"> Modificar Contraseña</button>
+            <button class="editPass" type="button" (click)="openModal()"> Modificar Contraseña</button>
             <button class="submit" type="submit" [disabled]="form.invalid">Actualizar Datos</button>
         </div>
     </form>

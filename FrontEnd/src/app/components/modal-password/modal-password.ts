@@ -1,16 +1,25 @@
 import { Component, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { UserServices } from '../../services/users/user-services';
+import { ChangePassword } from '../../services/models/change-password';
+import { AuthService } from '../../services/auth-service';
+import { AlertServices } from '../../services/alert-services';
+import { AlertBanner } from "../banner/alert-banner/alert-banner";
 
 @Component({
   selector: 'app-modal-password',
-  imports: [],
+  imports: [ReactiveFormsModule, AlertBanner],
   templateUrl: './modal-password.html',
   styleUrl: './modal-password.css'
 })
 export class ModalPassword {
+  private readonly alertService = inject(AlertServices);
   private readonly formBuilder = inject(FormBuilder)
   private readonly matDialog = inject(MatDialogRef)
+  private readonly authService = inject(AuthService);
+  protected readonly currentUser = this.authService.currentUserInfo;
+  private readonly client = inject(UserServices)
 
   protected readonly form = this.formBuilder.nonNullable.group({
     oldPassword:['', Validators.required],
@@ -54,9 +63,34 @@ export class ModalPassword {
     this.matDialog.close()
   }
 
-  handleSubmit(){
-    const data = this.form.getRawValue()
-    console.log(data)
+handleSubmit() {
+  const currentUser = this.currentUser();
+  if (!currentUser?.email) {
+    console.error('No hay usuario autenticado');
+    return;
   }
+
+  const dataForm = this.form.getRawValue();
+  const data: ChangePassword = {
+    email: currentUser.email,
+    oldPassword: dataForm.oldPassword,
+    newPassword: dataForm.password
+  };
+
+  this.client.changePassword(data).subscribe({
+    next: () => {
+      this.alertService.showMessage('Usuario registrado correctamente. Usted será redirigido al login', 'success');
+
+        setTimeout(() => {
+          this.close()
+        }, 2000);
+    },
+    error: (err) => {
+      this.alertService.showMessage('Error al modificar contraseña', 'error');
+      console.error('Error al cambiar la contraseña:', err);
+    }
+  });
+}
+
 
 }

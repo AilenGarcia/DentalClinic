@@ -1,7 +1,9 @@
+import { UserResponse } from "./user-response";
+
 export interface Paciente {
     id?: number,
     telefono: string,
     domicilio: string,
-    dni: string,
-    fechaDeAlta: Date
+    dni: string
+    users: UserResponse
 }
