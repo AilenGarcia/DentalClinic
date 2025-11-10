@@ -1,4 +1,4 @@
-package com.example.ClinicaOdontologica.security;
+package com.example.ClinicaOdontologica.security.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

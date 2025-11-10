@@ -1,5 +1,6 @@
 package com.example.ClinicaOdontologica.model.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,6 +13,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Rol {
     @Id @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer id;

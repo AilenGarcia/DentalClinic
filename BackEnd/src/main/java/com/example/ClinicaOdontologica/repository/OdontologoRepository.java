@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface OdontologoRepository extends JpaRepository<Odontologo, Integer> {
     @Modifying
@@ -15,4 +17,8 @@ public interface OdontologoRepository extends JpaRepository<Odontologo, Integer>
 
     @Query(value = "select * from odontologo where users_id= ?1", nativeQuery = true)
     Odontologo findByIdUsuario(Integer id);
+
+    @Query("SELECT o FROM Odontologo o WHERE o.users.id = :userId")
+    Optional<Odontologo> findByUserId(@Param("userId") Integer userId);
+
 }

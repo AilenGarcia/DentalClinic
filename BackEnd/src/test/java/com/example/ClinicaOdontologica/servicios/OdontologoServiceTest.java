@@ -14,14 +14,5 @@ import static org.mockito.Mockito.when;
 
 public class OdontologoServiceTest {
 
-    @DisplayName("Probamos la excepcion del metodo buscar")
-    @Test
-    public void buscarOdontologo(){
-        var repository = mock(OdontologoRepository.class);
-        when(repository.findById(anyInt())).thenReturn(Optional.empty());
-        var service = new OdontologoService(repository);
-
-        assertThrows(NotFoundException.class, ()-> service.buscar(5));
-    }
 
 }

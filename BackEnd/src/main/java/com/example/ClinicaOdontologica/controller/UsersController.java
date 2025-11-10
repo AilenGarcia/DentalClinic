@@ -16,6 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Tag(name = "Usuarios", description = "Operaciones relacionadas con los usuarios")
 @RestController
 @AllArgsConstructor
@@ -37,9 +40,12 @@ public class UsersController {
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PostMapping("/save")
-    public ResponseEntity<String> save(@RequestBody Userdto users) throws ExistenteException, NotFoundException {
+    public ResponseEntity<Map<String, String>> save(@RequestBody Userdto users)
+            throws ExistenteException, NotFoundException {
         usersService.saveUser(users);
-        return new ResponseEntity<>("saved users",null, HttpStatus.CREATED);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Usuario creado");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     /**
@@ -74,9 +80,11 @@ public class UsersController {
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PostMapping("/updatePassword")
-    public ResponseEntity<String> updatePassword(@RequestBody UpdatePasswordRequest users) throws NotFoundException {
+    public ResponseEntity<Map<String, String>> updatePassword(@RequestBody UpdatePasswordRequest users) throws NotFoundException {
         usersService.updatePassword(users);
-        return new ResponseEntity<>("Password updated",null, HttpStatus.OK);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Contraseña modificada");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     /**

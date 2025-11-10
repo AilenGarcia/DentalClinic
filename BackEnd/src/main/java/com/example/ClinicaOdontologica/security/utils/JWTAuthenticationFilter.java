@@ -1,6 +1,7 @@
-package com.example.ClinicaOdontologica.security;
+package com.example.ClinicaOdontologica.security.utils;
 
 import com.example.ClinicaOdontologica.authentication.AuthenticationRequest;
+import com.example.ClinicaOdontologica.security.UserDetailsImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

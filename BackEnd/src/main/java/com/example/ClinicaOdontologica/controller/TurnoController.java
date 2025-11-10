@@ -15,7 +15,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Tag(name = "Turnos", description = "Operaciones relacionadas con los turnos")
 @RestController
@@ -75,9 +78,11 @@ public class TurnoController {
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAnyAuthority('ROLE_ODONTOLOGOS', 'ROLE_PACIENTES')")
     @PostMapping("/add")
-    public ResponseEntity<String> agregar(@RequestBody Turno turno) throws ExistenteException, BadRequestException {
+    public ResponseEntity<Map<String, String>> agregar(@RequestBody Turno turno) throws ExistenteException, BadRequestException {
         turnoService.agregarTurno(turno);
-        return new ResponseEntity<>("Turno agregado correctamente",null, HttpStatus.CREATED);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Turno creado con exito");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     /**
@@ -96,9 +101,11 @@ public class TurnoController {
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAnyAuthority('ROLE_ODONTOLOGOS', 'ROLE_PACIENTES')")
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> eliminar(@PathVariable Integer id) throws NotFoundException {
+    public ResponseEntity<Map<String, String>> eliminar(@PathVariable Integer id) throws NotFoundException {
         turnoService.eliminarTurno(id);
-        return new ResponseEntity<>("Turno eliminado con exito", null, HttpStatus.OK);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Turno eliminado con exito");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     /**

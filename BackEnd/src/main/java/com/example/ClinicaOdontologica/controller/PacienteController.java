@@ -1,5 +1,6 @@
 package com.example.ClinicaOdontologica.controller;
 
+import com.example.ClinicaOdontologica.model.dto.PacienteDTO;
 import com.example.ClinicaOdontologica.model.entity.Paciente;
 import com.example.ClinicaOdontologica.exception.NotFoundException;
 import com.example.ClinicaOdontologica.servicios.PacienteService;
@@ -17,7 +18,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Tag(name = "Pacientes", description = "Operaciones relacionadas con los pacientes")
 @RestController
@@ -60,7 +63,7 @@ public class PacienteController {
     })
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAnyAuthority('ROLE_ODONTOLOGOS', 'ROLE_PACIENTES')")
-    @GetMapping("/find/{id}")
+    @GetMapping("/findBy/{id}")
     public ResponseEntity<Paciente> buscar(@PathVariable Integer id) throws NotFoundException {
         return new ResponseEntity<>(pacienteService.buscar(id), null, HttpStatus.OK);
     }
@@ -79,11 +82,13 @@ public class PacienteController {
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @SecurityRequirement(name = "bearerAuth")
-    @PreAuthorize("hasAuthority('ROLE_PACIENTES)")
+    @PreAuthorize("hasAuthority('ROLE_PACIENTES')")
     @PutMapping("/update")
-    public ResponseEntity<String> update(@RequestBody @Valid Paciente paciente) throws NotFoundException {
+    public ResponseEntity<Map<String, String>> update(@RequestBody @Valid PacienteDTO paciente) throws NotFoundException {
         pacienteService.update(paciente);
-        return ResponseEntity.ok("El paciente se actualizo exitosamente");
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Datos del paciente actualizados");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 }

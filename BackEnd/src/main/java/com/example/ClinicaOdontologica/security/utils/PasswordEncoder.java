@@ -1,4 +1,4 @@
-package com.example.ClinicaOdontologica.security;
+package com.example.ClinicaOdontologica.security.utils;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

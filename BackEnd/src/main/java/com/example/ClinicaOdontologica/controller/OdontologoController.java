@@ -1,5 +1,6 @@
 package com.example.ClinicaOdontologica.controller;
 
+import com.example.ClinicaOdontologica.model.dto.OdontologoDTO;
 import com.example.ClinicaOdontologica.model.entity.Odontologo;
 import com.example.ClinicaOdontologica.exception.NotFoundException;
 import com.example.ClinicaOdontologica.servicios.OdontologoService;
@@ -15,7 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Tag(name = "Odontologos", description = "Operaciones relacionadas con los odontologos")
 @RestController
@@ -78,8 +81,10 @@ public class OdontologoController {
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAuthority('ROLE_ODONTOLOGOS')")
     @PutMapping("/update")
-    public ResponseEntity<String> update(@RequestBody @Valid Odontologo odontologo) throws NotFoundException {
+    public ResponseEntity<Map<String, String>> update(@RequestBody @Valid OdontologoDTO odontologo) throws NotFoundException {
         odontologoService.update(odontologo);
-        return ResponseEntity.ok("El odontologo se actualizo exitosamente");
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Datos del odontologo actualizados");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

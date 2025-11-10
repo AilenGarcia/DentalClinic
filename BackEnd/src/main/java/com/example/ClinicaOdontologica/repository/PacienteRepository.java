@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PacienteRepository extends JpaRepository<Paciente, Integer> {
 
@@ -19,4 +20,8 @@ public interface PacienteRepository extends JpaRepository<Paciente, Integer> {
 
     @Query(value = "select * from paciente where users_id= ?1", nativeQuery = true)
     Paciente findByIdUsuario(Integer id);
+
+    @Query("SELECT p FROM Paciente p WHERE p.users.id = :userId")
+    Optional<Paciente> findByUserId(@Param("userId") Integer userId);
+
 }

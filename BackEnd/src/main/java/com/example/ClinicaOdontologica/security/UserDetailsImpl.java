@@ -2,6 +2,7 @@ package com.example.ClinicaOdontologica.security;
 
 import com.example.ClinicaOdontologica.model.entity.Users;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 @AllArgsConstructor
+@Getter
 public class UserDetailsImpl implements UserDetails {
 
     private final Users user;
