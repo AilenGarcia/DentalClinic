@@ -87,4 +87,28 @@ public class OdontologoController {
         response.put("message", "Datos del odontologo actualizados");
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    /**
+     * Función para eliminar un odontologo.
+     * @param id del odontologo a eliminar.
+     * @return Respuesta HTTP con un mensaje de éxito.
+     * @throws NotFoundException Si no se encuentra el odontologo con el ID proporcionado.
+     */
+    @Operation(summary = "Eliminar un odontologo", description = "Recibe un id de odontologo, verifica que no tiene turnos" +
+            "pendientes y lo elimina en la base de datos.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Elimina el odontologo correspondiente"),
+            @ApiResponse(responseCode = "404", description = "No se encontró el odontologo con el ID proporcionado"),
+            @ApiResponse(responseCode = "400", description = "Error en los datos proporcionados"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasAuthority('ROLE_ODONTOLOGOS')")
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Map<String, String>> eliminar(@PathVariable Integer id) throws NotFoundException {
+        odontologoService.delete(id);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Odontologo eliminado con exito");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }

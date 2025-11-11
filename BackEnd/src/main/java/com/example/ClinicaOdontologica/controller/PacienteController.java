@@ -91,4 +91,27 @@ public class PacienteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    /**
+     * Función para eliminar un paciente.
+     * @param id del paciente a eliminar.
+     * @return Respuesta HTTP con un mensaje de éxito.
+     * @throws NotFoundException Si no se encuentra el paciente con el ID proporcionado.
+     */
+    @Operation(summary = "Eliminar un paciente", description = "Recibe un id de paciente, verifica que no tiene turnos" +
+            "pendientes y lo elimina en la base de datos.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Elimina el paciente correspondiente"),
+            @ApiResponse(responseCode = "404", description = "No se encontró el paciente con el ID proporcionado"),
+            @ApiResponse(responseCode = "400", description = "Error en los datos proporcionados"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasAuthority('ROLE_PACIENTES')")
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Map<String, String>> eliminar(@PathVariable Integer id) throws NotFoundException {
+        pacienteService.delete(id);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Paciente eliminado con exito");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
 }

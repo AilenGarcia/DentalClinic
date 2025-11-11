@@ -93,7 +93,7 @@ public class TurnoController {
      */
     @Operation(summary = "Eliminar un turno", description = "Recibe un id de turno y lo elimina en la base de datos.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Elimina el turno correspondiente"),
+            @ApiResponse(responseCode = "204", description = "Elimina el turno correspondiente"),
             @ApiResponse(responseCode = "404", description = "No se encontró el turno con el ID proporcionado"),
             @ApiResponse(responseCode = "400", description = "Error en los datos proporcionados"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
@@ -105,7 +105,7 @@ public class TurnoController {
         turnoService.eliminarTurno(id);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Turno eliminado con exito");
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     /**

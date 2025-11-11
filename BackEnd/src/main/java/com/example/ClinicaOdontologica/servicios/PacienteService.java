@@ -5,11 +5,13 @@ import com.example.ClinicaOdontologica.model.dto.PacienteDTO;
 import com.example.ClinicaOdontologica.model.entity.Odontologo;
 import com.example.ClinicaOdontologica.model.entity.Paciente;
 import com.example.ClinicaOdontologica.exception.NotFoundException;
+import com.example.ClinicaOdontologica.model.entity.Turno;
 import com.example.ClinicaOdontologica.repository.PacienteRepository;
 import com.example.ClinicaOdontologica.repository.UsersRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -17,6 +19,7 @@ import java.util.List;
 public class PacienteService {
 
     private PacienteRepository pacienteRepository;
+    private TurnoService turnoService;
     private UsersRepository usersRepository;
 
     public Paciente buscar(Integer id) throws NotFoundException {
@@ -47,6 +50,21 @@ public class PacienteService {
 
         // 4️⃣ Guardar el odontólogo actualizado
         pacienteRepository.save(paciente);
+    }
+
+    public void delete(Integer id) throws NotFoundException {
+        Paciente paciente = buscar(id);
+
+        List<Turno> turnos = turnoService.buscarPorPaciente(id);
+
+        boolean tieneTurnosFuturos = turnos.stream()
+                .anyMatch(t -> !t.getFechaTurno().isBefore(LocalDate.now()));
+
+        if (tieneTurnosFuturos) {
+            throw new NotFoundException("No se puede eliminar el paciente con turnos futuros o del día de hoy");
+        }
+
+        pacienteRepository.delete(paciente);
     }
 
 }
