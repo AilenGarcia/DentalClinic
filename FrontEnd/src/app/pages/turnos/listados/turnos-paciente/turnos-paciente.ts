@@ -5,6 +5,7 @@ import { UserResponse } from '../../../../services/models/user-response';
 import { Paciente } from '../../../../services/models/paciente';
 import { Odontologo } from '../../../../services/models/odontologo';
 import { Turno } from '../../../../services/models/turnos';
+import { RouterLink } from "@angular/router";
 
 
 // Usuarios para Pacientes
@@ -90,7 +91,7 @@ const TURNOS: Turno[] = [
   standalone: true,
   templateUrl: './turnos-paciente.html',
   styleUrls: ['./turnos-paciente.css'],
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, RouterLink]
 })
 export class TurnosPaciente implements OnInit {
   odontologos = ODONTOLOGOS;

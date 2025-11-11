@@ -114,4 +114,35 @@ public class PacienteController {
         response.put("message", "Paciente eliminado con exito");
         return ResponseEntity.status(HttpStatus.OK).body(response);
         }
+
+
+    /**
+     * Función para obtener un paciente a partir del ID de usuario asociado.
+     * @param userId ID del usuario asociado.
+     * @return Respuesta HTTP con el paciente correspondiente.
+     * @throws NotFoundException Si no se encuentra un paciente con ese usuario.
+     */
+    @Operation(summary = "Obtener paciente por ID de usuario", description = "Devuelve el paciente asociado al ID del usuario proporcionado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Devuelve el paciente correspondiente"),
+            @ApiResponse(responseCode = "404", description = "No se encontró un paciente con ese usuario"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasAuthority('ROLE_PACIENTES')")
+    @GetMapping("/findByUser/{userId}")
+    public ResponseEntity<Paciente> getPacienteByUserId(@PathVariable Integer userId) throws NotFoundException {
+        //debug
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Usuario: " + auth.getName());
+        System.out.println("Autoridad: " + auth.getAuthorities());
+        //debug
+        Paciente paciente = pacienteService.findByUserId(userId);
+        if (paciente == null) {
+            throw new NotFoundException("No se encontró un paciente asociado al usuario con ID " + userId);
+        }
+        return ResponseEntity.ok(paciente);
+    }
+
+
 }

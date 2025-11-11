@@ -26,8 +26,7 @@ public class Paciente {
     private String dni;
     private Date fechaDeAlta;
 
-    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "users_id")
+    @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<Turno> turnos = new HashSet<>();
 

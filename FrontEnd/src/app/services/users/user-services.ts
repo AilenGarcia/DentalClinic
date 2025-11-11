@@ -86,5 +86,9 @@ findByIdPaciente(id: number){
     });
   }
 
+  getAllOdontologos(){
+    return this.client.get<Odontologo[]>(`${this.API_URL}/odontologos/list`);
+  }
+
 
 }

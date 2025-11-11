@@ -67,4 +67,7 @@ public class PacienteService {
         pacienteRepository.delete(paciente);
     }
 
+    public Paciente findByUserId(Integer userId) {
+        return pacienteRepository.findByIdUsuario(userId);
+    }
 }

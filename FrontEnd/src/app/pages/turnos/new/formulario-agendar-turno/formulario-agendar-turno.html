@@ -1,0 +1,48 @@
+<div class="container">
+    <h1>Agendar nuevo turno</h1>
+    <p class="sub">Complete los datos para agendar un nuevo turno.</p>
+
+    <div class="form-grid">
+        <div class="form-group">
+          <label for="fecha" class="form-label">Fecha</label>
+          <input 
+            type="date" 
+            id="fecha"
+            name="fecha"
+            [(ngModel)]="fecha"
+            class="form-input"
+            required
+          />
+        </div>
+  
+        <div class="form-group">
+          <label for="odontologo" class="form-label">Odontólogo</label>
+          <select 
+            id="odontologo"
+            name="odontologo"
+            [(ngModel)]="odontologoSeleccionado"
+            class="form-select"
+            required
+          >
+            <option value="" disabled selected>Seleccione un odontólogo</option>
+            
+            @for (odontologo of odontologos; track odontologo.id) {
+                <option [ngValue]="odontologo">
+                  {{ odontologo.users.nombre }} {{ odontologo.users.apellido }}
+                </option>
+              }
+            
+          </select>
+        </div>
+
+        <button 
+            type="button" 
+            class="btn-submit" 
+            (click)="agregarTurno()"
+            [disabled]="!fecha || !odontologoSeleccionado"
+        >
+            Agregar Turno
+        </button>
+  </div>
+    
+</div>

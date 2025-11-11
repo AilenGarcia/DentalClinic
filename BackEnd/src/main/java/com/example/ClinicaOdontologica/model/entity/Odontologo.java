@@ -25,8 +25,7 @@ public class Odontologo {
     private String matricula;
     private String descripcion;
 
-    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "odontologo_id")
+    @OneToMany(mappedBy = "odontologo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<Turno> turnos = new HashSet<>();
 

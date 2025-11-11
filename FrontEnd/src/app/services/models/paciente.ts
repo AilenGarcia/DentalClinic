@@ -4,6 +4,6 @@ export interface Paciente {
     id?: number,
     telefono: string,
     domicilio: string,
-    dni: string
+    dni: string,
     users: UserResponse
 }

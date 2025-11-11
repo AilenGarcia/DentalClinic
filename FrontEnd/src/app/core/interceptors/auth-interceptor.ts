@@ -22,12 +22,28 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     });
   }
 
+  /*
   return next(clonedReq).pipe(
     catchError((error) => {
       if (error.status === 401 || error.status === 403) {
         console.warn('Token inválido o sesión expirada');
         authService.logout();
       }
+      return throwError(() => error);
+    })
+  );
+  */
+  return next(clonedReq).pipe(
+    catchError((error) => {
+      if (error.status === 401) {
+        console.warn('Token inválido o sesión expirada');
+        authService.logout();
+      }
+      
+      if (error.status === 403) {
+        console.warn('Acceso denegado: sin permisos suficientes');
+      }
+      
       return throwError(() => error);
     })
   );

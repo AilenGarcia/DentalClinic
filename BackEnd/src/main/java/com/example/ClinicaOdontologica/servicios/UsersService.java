@@ -96,4 +96,5 @@ public class UsersService {
         user.setPassword(passwordEncoder.encode(u.newPassword()));
         usersRepository.save(user);
     }
+
 }
