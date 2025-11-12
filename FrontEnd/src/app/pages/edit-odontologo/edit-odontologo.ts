@@ -8,6 +8,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { of } from 'rxjs';
 import { Odontologo } from '../../services/models/odontologo';
 import { AlertBanner } from "../../components/banner/alert-banner/alert-banner";
+import { ConfirmDialogComponent } from '../../components/confirm-dialog-component/confirm-dialog-component';
 
 @Component({
   selector: 'app-edit-odontologo',
@@ -20,6 +21,7 @@ export class EditOdontologo {
   private readonly modalDialog = inject(MatDialog);
   private readonly authServices = inject(AuthService);
   private readonly client = inject(UserServices);
+    private readonly dialog = inject(MatDialog);
 
   protected readonly currentUser = this.authServices.currentUserInfo;
 
@@ -79,6 +81,25 @@ export class EditOdontologo {
     dialogRef.afterClosed().subscribe(() => { });
   }
 
+    deleteUser() {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: '350px',
+        data: {
+          title: 'Confirma eliminar usuario',
+          message: '¿Desea eliminar el usuario?',
+        },
+      });
+  
+      dialogRef.afterClosed().subscribe((confirmed) => {
+        if (confirmed) {
+          const id = this.currentUser()?.id;
+          if (id !== undefined) {
+            this.client.deleteUser(id);
+          }
+        }
+      });
+    }
+
   handleSubmit() {
     const dataForm = this.form.getRawValue();
     const data: Odontologo = {
@@ -93,6 +114,17 @@ export class EditOdontologo {
         email: dataForm.email
       }
     }
-    this.client.updateOdontologo(data);
+        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+          width: '350px',
+          data: {
+            title: 'Confirmar actualizacion de datos',
+            message: '¿Desea actualizar los datos?',
+          },
+        });
+    
+        dialogRef.afterClosed().subscribe((confirmed) => {
+          if (confirmed) {
+          this.client.updateOdontologo(data);          }
+        });
   }
 }

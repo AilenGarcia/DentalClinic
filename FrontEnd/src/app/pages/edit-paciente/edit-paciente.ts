@@ -8,6 +8,7 @@ import { of } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Paciente } from '../../services/models/paciente';
 import { AlertBanner } from "../../components/banner/alert-banner/alert-banner";
+import { ConfirmDialogComponent } from '../../components/confirm-dialog-component/confirm-dialog-component';
 
 @Component({
   selector: 'app-edit-paciente',
@@ -20,6 +21,7 @@ export class EditPaciente {
   private readonly modalDialog = inject(MatDialog);
   private readonly authServices = inject(AuthService);
   private readonly client = inject(UserServices);
+  private readonly dialog = inject(MatDialog);
 
   protected readonly currentUser = this.authServices.currentUserInfo;
 
@@ -34,71 +36,103 @@ export class EditPaciente {
 
   protected readonly form = this.formBuilder.nonNullable.group({
     nombre: ['', Validators.required],
-    apellido:['', Validators.required],
+    apellido: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     telefono: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
-    domicilio: ['',Validators.required],
-    dni: ['',[Validators.required, Validators.minLength(8)]]
+    domicilio: ['', Validators.required],
+    dni: ['', [Validators.required, Validators.minLength(8)]]
   })
 
-    protected readonly fillFormEffect = effect(() => {
-      const odontologo = this.signalOdontologo();
-      if (!odontologo || !odontologo.users) return;
-  
-      this.form.patchValue({
-        telefono: odontologo.telefono,
-        nombre: odontologo.users.nombre,
-        apellido: odontologo.users.apellido,
-        email: odontologo.users.email,
-        dni: odontologo.dni,
-        domicilio: odontologo.domicilio,
-      });
+  protected readonly fillFormEffect = effect(() => {
+    const odontologo = this.signalOdontologo();
+    if (!odontologo || !odontologo.users) return;
+
+    this.form.patchValue({
+      telefono: odontologo.telefono,
+      nombre: odontologo.users.nombre,
+      apellido: odontologo.users.apellido,
+      email: odontologo.users.email,
+      dni: odontologo.dni,
+      domicilio: odontologo.domicilio,
     });
+  });
 
-  get nombre(){
+  get nombre() {
     return this.form.controls.nombre;
   }
 
-  get apellido(){
+  get apellido() {
     return this.form.controls.nombre;
   }
 
-    get email(){
+  get email() {
     return this.form.controls.nombre;
   }
 
-    get telefono(){
+  get telefono() {
     return this.form.controls.nombre;
   }
 
-    get dni(){
+  get dni() {
     return this.form.controls.nombre;
   }
 
-    get domicilio(){
+  get domicilio() {
     return this.form.controls.nombre;
   }
 
-  openModal(){
+  openModal() {
     const dialogRef = this.modalDialog.open(ModalPassword)
-    dialogRef.afterClosed().subscribe(()=>{
+    dialogRef.afterClosed().subscribe(() => {
     })
   }
 
-  handleSubmit(){
+  deleteUser() {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '350px',
+      data: {
+        title: 'Confirma eliminar usuario',
+        message: '¿Desea eliminar el usuario?',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        const id = this.currentUser()?.id;
+        if (id !== undefined) {
+          this.client.deleteUser(id);
+        }
+      }
+    });
+  }
+
+  handleSubmit() {
     const dataForm = this.form.getRawValue();
     const data: Paciente = {
-          id: this.signalOdontologo()?.id,
-          telefono: dataForm.telefono,
-          dni: dataForm.dni,
-          domicilio: dataForm.domicilio,
-          users: {
-            id: this.currentUser()?.id,
-            nombre: dataForm.nombre,
-            apellido: dataForm.apellido,
-            email: dataForm.email
-          }
-        }
-    this.client.updatePaciente(data);
+      id: this.signalOdontologo()?.id,
+      telefono: dataForm.telefono,
+      dni: dataForm.dni,
+      domicilio: dataForm.domicilio,
+      users: {
+        id: this.currentUser()?.id,
+        nombre: dataForm.nombre,
+        apellido: dataForm.apellido,
+        email: dataForm.email
+      }
+    }
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '350px',
+      data: {
+        title: 'Confirmar actualizacion de datos',
+        message: '¿Desea actualizar los datos?',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.client.updatePaciente(data);
+      }
+    });
   }
 }

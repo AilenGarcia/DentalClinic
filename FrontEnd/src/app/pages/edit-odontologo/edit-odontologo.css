@@ -94,6 +94,25 @@ button.submit:disabled {
     border: none;
 }
 
+.delete {
+    background-color: #ffffff;
+    color: rgb(188, 29, 29);
+    border: 1px solid rgb(188, 29, 29);
+    border-radius: 8px;
+    padding: 0.9rem;
+    width: 30%;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.delete:hover {
+    background-color: rgb(188, 29, 29);
+    color: #ffffff;
+    border:none;
+}
+
 .head-input {
     padding-top: 1.5rem;
     display: flex;

@@ -90,5 +90,19 @@ findByIdPaciente(id: number){
     return this.client.get<Odontologo[]>(`${this.API_URL}/odontologos/list`);
   }
 
+    deleteUser(id: number) {
+    this.client.delete<string>(`${this.API_URL}/users/delete/${id}`).subscribe({
+      next: () => {
+        this.alertService.showMessage('Usuario eliminado correctamente.', 'success');
+
+          this.authService.logout();
+      },
+      error: (err) => {
+        this.alertService.showMessage('No es posible eliminar este usuario. Pruebe mas tarde.', 'error');
+        console.error(err);
+      },
+    });
+  }
+
 
 }
