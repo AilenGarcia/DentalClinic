@@ -46,9 +46,9 @@ export class Header {
   goTo() {
     const role = this.userInfo()?.role;
     if (role === 'ROLE_ODONTOLOGOS') {
-      this.router.navigateByUrl('/odontologos');
+      this.router.navigateByUrl('/turnos/odontologos');
     } else if (role === 'ROLE_PACIENTES') {
-      this.router.navigateByUrl('/pacientes');
+      this.router.navigateByUrl('/turnos/pacientes');
     } else {
       this.router.navigateByUrl('/home');
     }

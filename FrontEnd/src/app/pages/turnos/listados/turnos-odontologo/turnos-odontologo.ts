@@ -12,10 +12,14 @@ import { PacienteService } from '../../../../services/pacientes/paciente-service
 import { Router } from '@angular/router';
 import { Paciente } from '../../../../services/models/paciente';
 import { OdontologoService } from '../../../../services/odontologos/odontologo-services';
+import { MatDialog } from '@angular/material/dialog';
+import { AlertServices } from '../../../../services/alert-services';
+import { ConfirmDialogComponent } from '../../../../components/confirm-dialog-component/confirm-dialog-component';
+import { AlertBanner } from "../../../../components/banner/alert-banner/alert-banner";
 
 @Component({
   selector: 'app-turnos-odontologo',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AlertBanner],
   templateUrl: './turnos-odontologo.html',
   styleUrl: './turnos-odontologo.css'
 })
@@ -27,6 +31,8 @@ export class TurnosOdontologo implements OnInit {
   private readonly pacienteService = inject(PacienteService);
   private readonly odontologoService = inject(OdontologoService);
   private readonly router = inject(Router);
+  private readonly matDialog = inject(MatDialog)
+  private readonly alertService = inject(AlertServices)
 
   currentUser: UserResponse | null = null;
   currentOdontologo: Odontologo | null = null;
@@ -39,6 +45,8 @@ export class TurnosOdontologo implements OnInit {
   pageSize: number = 5;
   currentPage: number = 1;
   totalPages: number = 1;
+  cargando = false;
+
 
   // Modal properties
   mostrarModal: boolean = false;
@@ -49,6 +57,7 @@ export class TurnosOdontologo implements OnInit {
     this.userService.getAllPacientes().subscribe({
       next: (data) => {
         this.pacientes = data;
+        this.cargando = true;
       },
       error: (err) => {
         console.error('Error al cargar pacientes:', err);
@@ -61,7 +70,6 @@ export class TurnosOdontologo implements OnInit {
 
     if (!this.currentUser || !this.currentUser.id) {
       console.error('No hay usuario autenticado o no tiene ID');
-      alert('No se pudo obtener la información del usuario. Por favor, inicia sesión nuevamente.');
       this.router.navigate(['/login']);
       return;
     }
@@ -72,7 +80,6 @@ export class TurnosOdontologo implements OnInit {
 
         if (!this.currentOdontologo?.id) {
           console.error('El paciente no tiene ID');
-          alert('No se pudo obtener la información del paciente.');
           return;
         }
         
@@ -80,13 +87,6 @@ export class TurnosOdontologo implements OnInit {
       },
       error: (err) => {
         console.error('Error al obtener paciente:', err);
-        if (err.status === 403) {
-          alert('No tienes permisos para acceder a esta información o no estás registrado.');
-        } else if (err.status === 404) {
-          alert('No se encontró un registro de paciente asociado a tu usuario.');
-        } else {
-          alert('Error al cargar la información del paciente.');
-        }
         this.router.navigate(['/']);
       }
     });
@@ -113,14 +113,6 @@ export class TurnosOdontologo implements OnInit {
         console.error('Error al recuperar turnos:', err);
         console.error('Status:', err.status);
         console.error('Message:', err.message);
-        
-        if (err.status === 404) {
-          alert('No se encontraron turnos para este paciente.');
-        } else if (err.status === 403) {
-          alert('No tienes permisos para ver estos turnos.');
-        } else {
-          alert('Error al cargar los turnos. Por favor, intenta nuevamente.');
-        }
       }
     });
   }
@@ -197,30 +189,40 @@ export class TurnosOdontologo implements OnInit {
         if (!turno || !turno.id) {
           return;
         }
-    
-        if (confirm('¿Estás seguro de que deseas eliminar este turno?')) {
-          this.turnoService.eliminar(turno.id).subscribe({
-            next: () => {
-    
-              this.turnos = this.turnos.filter(t => t.id !== turno.id);
-              this.turnosFiltrados = this.turnosFiltrados.filter(t => t.id !== turno.id);
-              this.calcularPaginacion();
-              
-              if (this.turnosPaginados.length === 0 && this.currentPage > 1) {
-                this.currentPage--;
-                this.actualizarPagina();
-              }
-    
-              this.cerrarModal();
-              
-              alert('Turno eliminado correctamente');
-            },
-            error: (err) => {
-              console.error('Error al eliminar turno:', err);
-              alert('Error al eliminar el turno. Por favor, intenta nuevamente.');
-            }
-          });
+
+              const dialogRef = this.matDialog.open(ConfirmDialogComponent, {
+                width: '350px',
+                data: {
+                  title: 'Eliminar turno',
+                  message: '¿Desea eliminar el turno?',
+                },
+              });
+            
+              dialogRef.afterClosed().subscribe((confirmed) => {
+                if (confirmed) {
+                this.turnoService.eliminar(turno.id!).subscribe({
+                  next: () => {
+          
+                    this.turnos = this.turnos.filter(t => t.id !== turno.id);
+                    this.turnosFiltrados = this.turnosFiltrados.filter(t => t.id !== turno.id);
+                    this.calcularPaginacion();
+                    
+                    if (this.turnosPaginados.length === 0 && this.currentPage > 1) {
+                      this.currentPage--;
+                      this.actualizarPagina();
+                    }
+          
+                    this.cerrarModal();
+                    
+                    this.alertService.showMessage('Turno eliminado correctamente', 'success');
+                  },
+                  error: (err) => {
+                    console.error('Error al eliminar turno:', err);
+                    this.alertService.showMessage('Error al eliminar el turno. Por favor, intenta nuevamente.', 'error');
+                  }  
+                  });  
         }
+      })
       }
   
     formatearFecha(fecha: string): string {

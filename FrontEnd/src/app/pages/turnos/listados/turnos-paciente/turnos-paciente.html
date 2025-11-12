@@ -1,4 +1,5 @@
 <div class="container">
+    <app-alert-banner></app-alert-banner>
     <h1>Mis Turnos Médicos</h1>
     <p class="sub">Consulta y gestiona tus citas médicas</p>
     
@@ -24,7 +25,7 @@
         </div>
     </div>
 
-    @if (turnosPaginados.length > 0) {
+    @if (this.cargando) {
         <table class="tabla">
             <thead>
                 <tr>
@@ -35,15 +36,19 @@
                 </tr>
             </thead>
             <tbody>
-                @for (t of turnosPaginados; track t.id) {
-                    <tr>
-                        <td>#{{ t.id }}</td>
-                        <td>{{ t.fechaTurno.split('T')[0] }}</td>
-                        <td>{{ t.odontologo.users.nombre }} {{ t.odontologo.users.apellido }}</td>
-                        <td>
-                            <button class="btn-ver" (click)="verDetalles(t)">Ver Detalles</button>
-                        </td>
-                    </tr>
+                @if(turnosPaginados.length === 0){
+                    <p>No hay turnos</p>
+                } @else {
+                    @for (t of turnosPaginados; track t.id) {
+                        <tr>
+                            <td>#{{ t.id }}</td>
+                            <td>{{ t.fechaTurno.split('T')[0] }}</td>
+                            <td>{{ t.odontologo.users.nombre }} {{ t.odontologo.users.apellido }}</td>
+                            <td>
+                                <button class="btn-ver" (click)="verDetalles(t)">Ver Detalles</button>
+                            </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
@@ -55,7 +60,7 @@
         </div>
     } @else {
         <div class="loading">
-            <span class="spinner"></span> No hay turnos disponibles
+            <span class="spinner"></span> Cargando turnos...
         </div>
     }
 

@@ -15,12 +15,10 @@
 @if(typeUser() === 'ROLE_PACIENTES'){
 <ul class="nav-menu">
   <li><a routerLink="/turnos/pacientes" routerLinkActive="active" class="nav-link">Turnos</a></li>
-  <li><a routerLink="/pacientes" routerLinkActive="active" class="nav-link">Inicio</a></li>
 </ul>
 } @else {
 <ul class="nav-menu">
   <li><a routerLink="/turnos/odontologos" routerLinkActive="active" class="nav-link">Turnos</a></li>
-  <li><a routerLink="/odontologos" routerLinkActive="active" class="nav-link">Inicio</a></li>
 </ul>
 }
 

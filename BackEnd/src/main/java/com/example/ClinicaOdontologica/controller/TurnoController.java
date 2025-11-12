@@ -124,7 +124,7 @@ public class TurnoController {
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAnyAuthority('ROLE_ODONTOLOGOS', 'ROLE_PACIENTES')")
     @GetMapping("/findByOd/{id}")
-    public ResponseEntity<List<Turno>> buscarPorOdontologo(@PathVariable Integer id) throws NotFoundException {
+    public ResponseEntity<List<Turno>> buscarPorOdontologo(@PathVariable Integer id){
         return new ResponseEntity<>(turnoService.buscarPorOdontologo(id), null, HttpStatus.OK);
     }
 
@@ -144,11 +144,7 @@ public class TurnoController {
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasAnyAuthority('ROLE_ODONTOLOGOS', 'ROLE_PACIENTES')")
     @GetMapping("/findByPa/{id}")
-    public ResponseEntity<List<Turno>> buscarPorPaciente(@PathVariable Integer id) throws NotFoundException {
-
-        System.out.println("Buscando turnos para el paciente con ID: " + id);
-        if(turnoService.buscarPorPaciente(id).isEmpty()) return new ResponseEntity<>(null,null, HttpStatus.NOT_FOUND);
-        System.out.println("2");
+    public ResponseEntity<List<Turno>> buscarPorPaciente(@PathVariable Integer id) {
         return new ResponseEntity<>(turnoService.buscarPorPaciente(id), null, HttpStatus.OK);
     }
 

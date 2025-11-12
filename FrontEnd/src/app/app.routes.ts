@@ -21,7 +21,7 @@ export const routes: Routes = [
             {path: 'turnos', children: [
                     {path: 'pacientes', component: TurnosPaciente,canActivate:[authGuard], title: 'Listado de turnos'},
                     {path: 'odontologos', component: TurnosOdontologo,canActivate:[authGuard], title: 'Listado de turnos'},
-                    {path: 'new', component: FormularioAgendarTurno,canActivate:[authGuard], title: 'Listado de turnos'}
+                    {path: 'new', component: FormularioAgendarTurno,canActivate:[authGuard], title: 'Agregar nuevo turno.'}
                 ]
             },
             {path: 'odontologos', component: Odontologos, title: 'Listado de odontólogos', canActivate:[authGuard]},

@@ -66,7 +66,7 @@ public class UsersService {
         if("ROLE_PACIENTES".equals(usuario.get().getRol().getNombre())){
             var paciente = pacienteRepository.findByIdUsuario(usuario.get().getId());
 
-            List<Turno> turnos = turnoRepository.findByPaciente(paciente.getId());
+            List<Turno> turnos = turnoRepository.findByPacienteId(paciente.getId());
 
             boolean tieneTurnosFuturos = turnos.stream()
                     .anyMatch(t -> !t.getFechaTurno().isBefore(LocalDate.now()));
@@ -82,7 +82,7 @@ public class UsersService {
         if("ROLE_ODONTOLOGOS".equals(usuario.get().getRol().getNombre())){
             var odontologo = odontologoRepository.findByIdUsuario(usuario.get().getId());
 
-            List<Turno> turnos = turnoRepository.findByOdontologo(odontologo.getId());
+            List<Turno> turnos = turnoRepository.findByOdontologoId(odontologo.getId());
 
             boolean tieneTurnosFuturos = turnos.stream()
                     .anyMatch(t -> !t.getFechaTurno().isBefore(LocalDate.now()));

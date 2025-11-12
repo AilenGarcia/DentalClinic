@@ -1,5 +1,6 @@
 <div class="container">
-    <h1>Mis Turnos Médicos</h1>
+    <app-alert-banner></app-alert-banner>
+    <h1>Turnos</h1>
     <p class="sub">Consulta y gestiona tus citas médicas</p>
     
     <div class="card">
@@ -24,7 +25,7 @@
         </div>
     </div>
 
-    @if (turnosPaginados.length > 0) {
+    @if (cargando) {
         <table class="tabla">
             <thead>
                 <tr>
@@ -34,14 +35,18 @@
                 </tr>
             </thead>
             <tbody>
-                @for (t of turnosPaginados; track t.id) {
-                    <tr>
-                        <td>{{ t.fechaTurno.split('T')[0] }}</td>
-                        <td>{{ t.paciente.users.nombre }} {{ t.paciente.users.apellido }}</td>
-                        <td>
-                            <button class="btn-ver" (click)="verDetalles(t)">Ver Detalles</button>
-                        </td>
-                    </tr>
+                @if(turnosPaginados.length === 0){
+                    <p>Sin resultados</p>
+                } @else {
+                    @for (t of turnosPaginados; track t.id) {
+                        <tr>
+                            <td>{{ t.fechaTurno.split('T')[0] }}</td>
+                            <td>{{ t.paciente.users.nombre }} {{ t.paciente.users.apellido }}</td>
+                            <td>
+                                <button class="btn-ver" (click)="verDetalles(t)">Ver Detalles</button>
+                            </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>

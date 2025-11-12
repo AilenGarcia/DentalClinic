@@ -69,6 +69,7 @@ export class AuthService {
       )
       .subscribe({
         next: (response) => {
+          console.log('antes', response.role)
           this.redirigirSegunRol(response.role);
         }
       });
@@ -80,12 +81,13 @@ private cargarUsuario(email: string) {
 }
 
   private redirigirSegunRol(role: string) {
+    console.log('rol',role)
     switch(role) {
       case 'ROLE_PACIENTES':
-        this.router.navigateByUrl('/pacientes');
+        this.router.navigateByUrl('/turnos/pacientes');
         break;
       case 'ROLE_ODONTOLOGOS':
-        this.router.navigateByUrl('/odontologos');
+        this.router.navigateByUrl('/turnos/odontologos');
         break;
       default:
         console.warn('Rol desconocido:', role);
@@ -96,6 +98,7 @@ private cargarUsuario(email: string) {
 
   logout() {
     localStorage.removeItem('token');
+    this.currentUser.set(null);
     this.userInfo.set(null);
     this.router.navigate(['/home']);
   }
