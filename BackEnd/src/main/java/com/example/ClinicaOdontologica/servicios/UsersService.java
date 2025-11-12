@@ -5,16 +5,15 @@ import com.example.ClinicaOdontologica.exception.NotFoundException;
 import com.example.ClinicaOdontologica.model.dto.UpdatePasswordRequest;
 import com.example.ClinicaOdontologica.model.dto.Userdto;
 import com.example.ClinicaOdontologica.model.entity.*;
-import com.example.ClinicaOdontologica.repository.OdontologoRepository;
-import com.example.ClinicaOdontologica.repository.PacienteRepository;
-import com.example.ClinicaOdontologica.repository.RolRepository;
-import com.example.ClinicaOdontologica.repository.UsersRepository;
+import com.example.ClinicaOdontologica.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -25,6 +24,7 @@ public class UsersService {
     private UsersRepository usersRepository;
     private PacienteRepository pacienteRepository;
     private OdontologoRepository odontologoRepository;
+    private TurnoRepository turnoRepository;
 
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -65,16 +65,36 @@ public class UsersService {
         if (usuario.isEmpty()) throw new NotFoundException("El usuario no existe");
         if("ROLE_PACIENTES".equals(usuario.get().getRol().getNombre())){
             var paciente = pacienteRepository.findByIdUsuario(usuario.get().getId());
+
+            List<Turno> turnos = turnoRepository.findByPaciente(paciente.getId());
+
+            boolean tieneTurnosFuturos = turnos.stream()
+                    .anyMatch(t -> !t.getFechaTurno().isBefore(LocalDate.now()));
+
+            if (tieneTurnosFuturos) {
+                throw new NotFoundException("No se puede eliminar el pacientes con turnos futuros o del día de hoy");
+            }
+
             if(paciente != null){
                 pacienteRepository.delete(paciente);
             }
         }
         if("ROLE_ODONTOLOGOS".equals(usuario.get().getRol().getNombre())){
             var odontologo = odontologoRepository.findByIdUsuario(usuario.get().getId());
-            if(odontologo != null){
-                odontologoRepository.delete(odontologo);
+
+            List<Turno> turnos = turnoRepository.findByOdontologo(odontologo.getId());
+
+            boolean tieneTurnosFuturos = turnos.stream()
+                    .anyMatch(t -> !t.getFechaTurno().isBefore(LocalDate.now()));
+
+            if (tieneTurnosFuturos) {
+                throw new NotFoundException("No se puede eliminar el odontólogo con turnos futuros o del día de hoy");
             }
+
+            if(odontologo != null){
+                odontologoRepository.delete(odontologo);            }
         }
+
         usersRepository.delete(usuario.get());
     }
 
