@@ -3,6 +3,7 @@ package com.example.ClinicaOdontologica.servicios;
 import com.example.ClinicaOdontologica.model.dto.OdontologoDTO;
 import com.example.ClinicaOdontologica.model.entity.Odontologo;
 import com.example.ClinicaOdontologica.exception.NotFoundException;
+import com.example.ClinicaOdontologica.model.entity.Paciente;
 import com.example.ClinicaOdontologica.model.entity.Turno;
 import com.example.ClinicaOdontologica.repository.OdontologoRepository;
 import com.example.ClinicaOdontologica.repository.UsersRepository;
@@ -69,6 +70,9 @@ public class OdontologoService {
         odontologoRepository.delete(odontologo);
     }
 
+    public Odontologo findByUserId(Integer userId) {
+        return odontologoRepository.findByIdUsuario(userId);
+    }
 
 }
 

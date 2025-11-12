@@ -145,8 +145,14 @@ public class TurnoController {
     @PreAuthorize("hasAnyAuthority('ROLE_ODONTOLOGOS', 'ROLE_PACIENTES')")
     @GetMapping("/findByPa/{id}")
     public ResponseEntity<List<Turno>> buscarPorPaciente(@PathVariable Integer id) throws NotFoundException {
+
+        System.out.println("Buscando turnos para el paciente con ID: " + id);
+        if(turnoService.buscarPorPaciente(id).isEmpty()) return new ResponseEntity<>(null,null, HttpStatus.NOT_FOUND);
+        System.out.println("2");
         return new ResponseEntity<>(turnoService.buscarPorPaciente(id), null, HttpStatus.OK);
     }
+
+
 
 
 }

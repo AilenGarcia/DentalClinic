@@ -104,5 +104,9 @@ findByIdPaciente(id: number){
     });
   }
 
+  getAllPacientes(){
+    return this.client.get<Paciente[]>(`${this.API_URL}/pacientes/list`);
+  }
+
 
 }

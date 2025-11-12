@@ -31,7 +31,7 @@ public class TurnoService {
     public List<Turno> listar(){return turnoRepository.findAll();}
 
     public List<Turno> buscarPorOdontologo(Integer id) throws NotFoundException{
-        List<Turno> turnos =  turnoRepository.findByOdontologo(id);
+        List<Turno> turnos =  turnoRepository.findByOdontologoId(id);
         if (turnos.isEmpty()) {
             throw new NotFoundException("No hay turnos para el paciente con ID: " + id);
         }
@@ -39,7 +39,7 @@ public class TurnoService {
     }
 
     public List<Turno> buscarPorPaciente(Integer id) throws NotFoundException {
-        List<Turno> turnos = turnoRepository.findByPaciente(id);
+        List<Turno> turnos = turnoRepository.findByPacienteId(id);
         if (turnos.isEmpty()) {
             throw new NotFoundException("No hay turnos para el paciente con ID: " + id);
         }

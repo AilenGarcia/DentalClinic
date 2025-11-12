@@ -3,6 +3,7 @@ package com.example.ClinicaOdontologica.controller;
 import com.example.ClinicaOdontologica.model.dto.OdontologoDTO;
 import com.example.ClinicaOdontologica.model.entity.Odontologo;
 import com.example.ClinicaOdontologica.exception.NotFoundException;
+import com.example.ClinicaOdontologica.model.entity.Paciente;
 import com.example.ClinicaOdontologica.servicios.OdontologoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,6 +15,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -110,5 +113,33 @@ public class OdontologoController {
         Map<String, String> response = new HashMap<>();
         response.put("message", "Odontologo eliminado con exito");
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    /**
+     * Función para obtener un odontologo a partir del ID de usuario asociado.
+     * @param userId ID del usuario asociado.
+     * @return Respuesta HTTP con el odontologo correspondiente.
+     * @throws NotFoundException Si no se encuentra un odontologo con ese usuario.
+     */
+    @Operation(summary = "Obtener odontologo por ID de usuario", description = "Devuelve el paciente asociado al ID del usuario proporcionado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Devuelve el odontologo correspondiente"),
+            @ApiResponse(responseCode = "404", description = "No se encontró un odontologo con ese usuario"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasAuthority('ROLE_ODONTOLOGOS')")
+    @GetMapping("/findByUser/{userId}")
+    public ResponseEntity<Odontologo> getOdontologoByUserId(@PathVariable Integer userId) throws NotFoundException {
+        //debug
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Usuario: " + auth.getName());
+        System.out.println("Autoridad: " + auth.getAuthorities());
+        //debug
+        Odontologo odontologo = odontologoService.findByUserId(userId);
+        if (odontologo == null) {
+            throw new NotFoundException("No se encontró un odontologo asociado al usuario con ID " + userId);
+        }
+        return ResponseEntity.ok(odontologo);
     }
 }

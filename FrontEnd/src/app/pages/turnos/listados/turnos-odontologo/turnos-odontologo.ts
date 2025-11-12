@@ -1,89 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import printJS from 'print-js';
-import { User } from '../../../../services/models/user';
-import { Paciente } from '../../../../services/models/paciente';
 import { Odontologo } from '../../../../services/models/odontologo';
 import { Turno } from '../../../../services/models/turnos';
 import { UserResponse } from '../../../../services/models/user-response';
-
-const USER_PACIENTES: UserResponse[] = [
-  { 
-    id: 1, 
-    nombre: 'Juan', 
-    apellido: 'Pérez', 
-    email: 'juan.perez@email.com'
-  },
-  { 
-    id: 2, 
-    nombre: 'Ana', 
-    apellido: 'Gómez', 
-    email: 'ana.gomez@email.com'
-  }
-];
-
-const USER_ODONTOLOGOS: UserResponse[] = [
-  { 
-    id: 3, 
-    nombre: 'Laura', 
-    apellido: 'Ruiz', 
-    email: 'laura.ruiz@clinica.com'
-  },
-  { 
-    id: 4, 
-    nombre: 'Carlos', 
-    apellido: 'Pérez', 
-    email: 'carlos.perez@clinica.com'
-  }
-];
-
-// Pacientes
-const PACIENTES: Paciente[] = [
-  { 
-    id: 1, 
-    telefono: '1122334455', 
-    domicilio: 'Calle Falsa 123', 
-    dni: '12345678',
-    users: USER_PACIENTES[0]
-  },
-  { 
-    id: 2, 
-    telefono: '2233445566', 
-    domicilio: 'Av. Siempre Viva 742', 
-    dni: '87654321',
-    users: USER_PACIENTES[1]
-  }
-];
-
-// Odontólogos
-const ODONTOLOGOS: Odontologo[] = [
-  { 
-    id: '1', 
-    telefono: '1133557799',
-    matricula: 'A123', 
-    descripcion: 'Especialista en ortodoncia',
-    users: USER_ODONTOLOGOS[0]
-  },
-  { 
-    id: '2', 
-    telefono: '1144668800',
-    matricula: 'B456', 
-    descripcion: 'Especialista en endodoncia',
-    users: USER_ODONTOLOGOS[1]
-  }
-];
-
-// Turnos
-const TURNOS: Turno[] = [
-  { id: 1, fechaTurno: '2025-11-03', paciente: PACIENTES[0], odontologo: ODONTOLOGOS[0] },
-  { id: 2, fechaTurno: '2025-11-05', paciente: PACIENTES[1], odontologo: ODONTOLOGOS[1] },
-  { id: 3, fechaTurno: '2025-11-07', paciente: PACIENTES[0], odontologo: ODONTOLOGOS[1] },
-  { id: 4, fechaTurno: '2025-11-10', paciente: PACIENTES[1], odontologo: ODONTOLOGOS[0] },
-  { id: 5, fechaTurno: '2025-11-12', paciente: PACIENTES[0], odontologo: ODONTOLOGOS[1] },
-  { id: 6, fechaTurno: '2025-11-15', paciente: PACIENTES[0], odontologo: ODONTOLOGOS[1] },
-  { id: 7, fechaTurno: '2025-11-20', paciente: PACIENTES[0], odontologo: ODONTOLOGOS[1] }
-];
+import { UserServices } from '../../../../services/users/user-services';
+import { TurnoServices } from '../../../../services/turnos/turno-services';
+import { AuthService } from '../../../../services/auth-service';
+import { PacienteService } from '../../../../services/pacientes/paciente-services';
+import { Router } from '@angular/router';
+import { Paciente } from '../../../../services/models/paciente';
+import { OdontologoService } from '../../../../services/odontologos/odontologo-services';
 
 @Component({
   selector: 'app-turnos-odontologo',
@@ -93,28 +21,111 @@ const TURNOS: Turno[] = [
 })
 export class TurnosOdontologo implements OnInit {
 
-    odontologos = ODONTOLOGOS;
-    pacientes = PACIENTES
-    turnos = TURNOS;
-    turnosFiltrados: Turno[] = [...TURNOS];
-    turnosPaginados: Turno[] = [];
-    filtroOdontologo: string = '';
-    filtroPaciente: string = '';
-    filtroFecha: string = '';
-    pageSize: number = 5;
-    currentPage: number = 1;
-    totalPages: number = 1;
+  private readonly userService = inject(UserServices);
+  private readonly turnoService = inject(TurnoServices);
+  private readonly authService = inject(AuthService);
+  private readonly pacienteService = inject(PacienteService);
+  private readonly odontologoService = inject(OdontologoService);
+  private readonly router = inject(Router);
+
+  currentUser: UserResponse | null = null;
+  currentOdontologo: Odontologo | null = null;
+  pacientes: Paciente[] = [];
+  turnos: Turno[] = [];
+  turnosFiltrados: Turno[] = [];
+  turnosPaginados: Turno[] = [];
+  filtroPaciente: string = '';
+  filtroFecha: string = '';
+  pageSize: number = 5;
+  currentPage: number = 1;
+  totalPages: number = 1;
+
+  // Modal properties
+  mostrarModal: boolean = false;
+  turnoSeleccionado: Turno | null = null;
+
   
-    // ⭐ Nuevas propiedades para el modal
-    mostrarModal: boolean = false;
-    turnoSeleccionado: Turno | null = null;
-  
-    ngOnInit() {
-      this.calcularPaginacion();
+  ngOnInit() {
+    this.userService.getAllPacientes().subscribe({
+      next: (data) => {
+        this.pacientes = data;
+      },
+      error: (err) => {
+        console.error('Error al cargar pacientes:', err);
+      }
+    });
+
+    this.currentUser = this.authService.currentUserInfo();
+
+    console.log("usuario current: " + this.currentUser?.id)
+
+    if (!this.currentUser || !this.currentUser.id) {
+      console.error('No hay usuario autenticado o no tiene ID');
+      alert('No se pudo obtener la información del usuario. Por favor, inicia sesión nuevamente.');
+      this.router.navigate(['/login']);
+      return;
     }
+
+    this.odontologoService.getOdontologoByUserId(this.currentUser.id).subscribe({
+      next: (odontologo) => {
+        this.currentOdontologo = odontologo;
+
+        if (!this.currentOdontologo?.id) {
+          console.error('El paciente no tiene ID');
+          alert('No se pudo obtener la información del paciente.');
+          return;
+        }
+        
+        this.cargarTurnos(this.currentOdontologo.id);
+      },
+      error: (err) => {
+        console.error('Error al obtener paciente:', err);
+        if (err.status === 403) {
+          alert('No tienes permisos para acceder a esta información o no estás registrado.');
+        } else if (err.status === 404) {
+          alert('No se encontró un registro de paciente asociado a tu usuario.');
+        } else {
+          alert('Error al cargar la información del paciente.');
+        }
+        this.router.navigate(['/']);
+      }
+    });
+  }
+
+  private cargarTurnos(odontologoId: number) {
+    
+    this.turnoService.buscarPorOdontologo(odontologoId).subscribe({
+      next: (turnos) => {
+        
+        if (!turnos || turnos.length === 0) {
+          this.turnos = [];
+          this.turnosFiltrados = [];
+          this.calcularPaginacion();
+          return;
+        }
+
+        this.turnos = turnos;
+        this.turnosFiltrados = [...this.turnos];
+        
+        this.calcularPaginacion();
+      },
+      error: (err) => {
+        console.error('Error al recuperar turnos:', err);
+        console.error('Status:', err.status);
+        console.error('Message:', err.message);
+        
+        if (err.status === 404) {
+          alert('No se encontraron turnos para este paciente.');
+        } else if (err.status === 403) {
+          alert('No tienes permisos para ver estos turnos.');
+        } else {
+          alert('Error al cargar los turnos. Por favor, intenta nuevamente.');
+        }
+      }
+    });
+  }
   
     limpiarFiltros() {
-      this.filtroOdontologo = '';
       this.filtroPaciente = '';
       this.filtroFecha = '';
       this.turnosFiltrados = [...this.turnos];
@@ -125,7 +136,7 @@ export class TurnosOdontologo implements OnInit {
     aplicarFiltros() {
       this.turnosFiltrados = this.turnos.filter(turno => {
         const coincidePaciente =
-          !this.filtroPaciente || turno.paciente?.id === +this.filtroOdontologo;
+          !this.filtroPaciente || turno.paciente?.id === +this.filtroPaciente;
         
         const coincideFecha = !this.filtroFecha || this.compararFechasSinHora(
           turno.fechaTurno,
@@ -183,42 +194,48 @@ export class TurnosOdontologo implements OnInit {
     }
   
     eliminarTurno(turno: Turno) {
-      if (confirm('¿Estás seguro de que deseas eliminar este turno?')) {
-        // Eliminar del array principal
-        const indexTurnos = this.turnos.findIndex(t => t.id === turno.id);
-        if (indexTurnos > -1) {
-          this.turnos.splice(indexTurnos, 1);
+        if (!turno || !turno.id) {
+          return;
         }
-  
-        // Eliminar del array filtrado
-        const indexFiltrados = this.turnosFiltrados.findIndex(t => t.id === turno.id);
-        if (indexFiltrados > -1) {
-          this.turnosFiltrados.splice(indexFiltrados, 1);
+    
+        if (confirm('¿Estás seguro de que deseas eliminar este turno?')) {
+          this.turnoService.eliminar(turno.id).subscribe({
+            next: () => {
+    
+              this.turnos = this.turnos.filter(t => t.id !== turno.id);
+              this.turnosFiltrados = this.turnosFiltrados.filter(t => t.id !== turno.id);
+              this.calcularPaginacion();
+              
+              if (this.turnosPaginados.length === 0 && this.currentPage > 1) {
+                this.currentPage--;
+                this.actualizarPagina();
+              }
+    
+              this.cerrarModal();
+              
+              alert('Turno eliminado correctamente');
+            },
+            error: (err) => {
+              console.error('Error al eliminar turno:', err);
+              alert('Error al eliminar el turno. Por favor, intenta nuevamente.');
+            }
+          });
         }
-  
-        // Recalcular paginación
-        this.calcularPaginacion();
-        
-        // Si la página actual queda vacía, volver a la anterior
-        if (this.turnosPaginados.length === 0 && this.currentPage > 1) {
-          this.currentPage--;
-          this.actualizarPagina();
-        }
-  
-        // Cerrar modal
-        this.cerrarModal();
       }
-    }
   
-    // ⭐ Método auxiliar para formatear fecha
     formatearFecha(fecha: string): string {
-      const opciones: Intl.DateTimeFormatOptions = { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-      };
-      return new Date(fecha).toLocaleDateString('es-AR', opciones);
+      try {
+        const opciones: Intl.DateTimeFormatOptions = { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        };
+        return new Date(fecha).toLocaleDateString('es-AR', opciones);
+      } catch (error) {
+        console.error('Error al formatear fecha:', error);
+        return fecha;
+      }
     }
 
     imprimirTurnos() {

@@ -7,9 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface TurnoRepository extends JpaRepository<Turno, Integer> {
-    @Query(value = "select * from turno where odontologo_id= ?1", nativeQuery = true)
-    List<Turno> findByOdontologo(Integer id);
 
-    @Query(value = "select * from turno where paciente_id= ?1", nativeQuery = true)
-    List<Turno> findByPaciente(Integer id);
+    List<Turno> findByOdontologoId(Integer odontologoId);
+    List<Turno> findByPacienteId(Integer pacienteId);
 }
