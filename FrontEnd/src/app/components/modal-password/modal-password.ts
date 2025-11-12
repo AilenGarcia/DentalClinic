@@ -58,6 +58,17 @@ export class ModalPassword {
     return this.form.controls.passwordConfirm;
   }
 
+  showPasswordOld = false;
+
+  showPasswordNew = false;
+
+  togglePasswordOld() {
+    this.showPasswordOld = !this.showPasswordOld;
+  }
+
+    togglePasswordNew() {
+    this.showPasswordNew = !this.showPasswordNew;
+  }
 
   close() {
     this.matDialog.close()

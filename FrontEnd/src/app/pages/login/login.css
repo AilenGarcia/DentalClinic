@@ -125,6 +125,32 @@ span {
     padding-bottom: 0;
 }
 
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 2.5rem;
+}
+
+.eye-icon {
+    position: absolute;
+    right: 0.5rem;
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.eye-icon:hover {
+    opacity: 1;
+}
+
+
 @media (max-width: 1024px) {
     .container-login {
         width: 50vw;

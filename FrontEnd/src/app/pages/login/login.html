@@ -22,7 +22,14 @@
                     <span>*La contraseña es requerida</span>
                     }
                 </div>
-                <input type="password" name="password" id="password" formControlName="password" />
+                <div class="password-wrapper">
+                    <input [type]="showPassword ? 'text' : 'password'" name="password" id="password" formControlName="password" />
+
+                    <img class="eye-icon" alt="Mostrar u ocultar contraseña"
+                        src="{{ showPassword ? '/visibilityOff.svg' : '/visibility.svg' }}"
+                        (click)="togglePassword()"
+                    />
+                </div>
             </div>
 
             <div class="div-actions">

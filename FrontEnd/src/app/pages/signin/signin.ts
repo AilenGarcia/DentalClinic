@@ -71,6 +71,12 @@ export class Signin {
 
   get rolId() { return this.form.get('rolId')!; }
 
+  showPassword = false;
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
 handleSubmit() {
   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
     width: '350px',

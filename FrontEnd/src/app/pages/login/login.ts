@@ -27,6 +27,12 @@ export class Login {
     return this.form.controls.password;
   }
 
+  showPassword = false;
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
   handleSubmit(){
       const user = this.form.getRawValue();
       this.client.login(user);

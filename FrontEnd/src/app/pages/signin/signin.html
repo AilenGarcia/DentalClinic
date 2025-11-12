@@ -62,8 +62,15 @@
                     }
                     }
                 </div>
-                <input type="password" name="password" id="password" formControlName="password" />
-            </div>
+                <div class="password-wrapper">
+                    <input [type]="showPassword ? 'text' : 'password'" name="password" id="password" formControlName="password"/>
+
+                    <img class="eye-icon" alt="Mostrar u ocultar contraseña"
+                        src="{{ showPassword ? '/visibilityOff.svg' : '/visibility.svg' }}"
+                        (click)="togglePassword()"
+                    />
+                </div>
+            </div>    
 
             <div class="div-input">
                 <div class="head-input">
@@ -76,7 +83,14 @@
                     }
                     }
                 </div>
-                <input type="password" name="passwordConfirm" id="passwordConfirm" formControlName="passwordConfirm" />
+                <div class="password-wrapper">
+                    <input [type]="showPassword ? 'text' : 'password'" name="passwordConfirm" id="passwordConfirm" formControlName="passwordConfirm" />
+
+                    <img class="eye-icon" alt="Mostrar u ocultar contraseña"
+                        src="{{ showPassword ? '/visibilityOff.svg' : '/visibility.svg' }}"
+                        (click)="togglePassword()"
+                    />
+                </div>
             </div>
 
             <div class="div-actions">
