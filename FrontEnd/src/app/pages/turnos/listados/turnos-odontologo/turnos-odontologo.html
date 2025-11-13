@@ -36,7 +36,13 @@
             </thead>
             <tbody>
                 @if(turnosPaginados.length === 0){
-                    <p>Sin resultados</p>
+                    <tr>
+                        <td class="empty" colspan="4">
+                            {{(turnos.length > 0)
+                            ?'No se han encontrado turnos con los parámetros de búsqueda seleccionados.'
+                            :'No tiene turnos agendados.'}}
+                        </td>
+                    </tr>
                 } @else {
                     @for (t of turnosPaginados; track t.id) {
                         <tr>

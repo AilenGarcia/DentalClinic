@@ -29,7 +29,6 @@ export class TurnosPaciente{
   private readonly turnoService = inject(TurnoServices);
   private readonly authService = inject(AuthService);
   private readonly pacienteService = inject(PacienteService);
-  private readonly router = inject(Router);
   private readonly matDialog = inject(MatDialog)
   private readonly alertService = inject(AlertServices)
   protected readonly currentUser = this.authService.currentUserInfo;
@@ -41,7 +40,7 @@ export class TurnosPaciente{
   turnosPaginados: Turno[] = [];
   filtroOdontologo: string = '';
   filtroFecha: string = '';
-  pageSize: number = 5;
+  pageSize: number = 10;
   currentPage: number = 1;
   totalPages: number = 1;
   cargando = true;

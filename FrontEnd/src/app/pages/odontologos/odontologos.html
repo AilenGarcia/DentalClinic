@@ -1,1 +1,88 @@
-<p>odontologos works!</p>
+<div class="container">
+    <h1>Odontólogos</h1>
+    <p class="sub">Consulta nuestros odontólogos disponibles.</p>
+    
+    @if (true) {
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Matrícula</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(odontologosPaginados.length === 0){
+                    <p>No se encuentran odontólogos disponibles.</p>
+                } @else {
+                    @for (o of odontologosPaginados; track o.id) {
+                        <tr>
+                            <td>{{ (o.matricula)? o.matricula : 'No matriculado.' }}</td>
+                            <td>{{ o.users.nombre }} {{ o.users.apellido }}</td>
+                            <td>{{ o.users.email }}</td>
+                            <td>
+                                <button class="btn-ver" (click)="verFichaCompleta(o)">Ver Ficha Completa</button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+        <div class="paginacion">
+            <button (click)="paginaAnterior()" [disabled]="currentPage === 1">Anterior</button>
+            <span>Página {{currentPage}} de {{totalPages}}</span>
+            <button (click)="paginaSiguiente()" [disabled]="currentPage === totalPages">Siguiente</button>
+        </div>  
+    } @else {
+        <div class="loading">
+            <span class="spinner"></span> Cargando turnos...
+        </div>
+    }
+
+    <!-- Modal de ficha del odontólogo -->
+@if (mostrarFicha && odontologoSeleccionado) {
+    <div class="modal-overlay" (click)="cerrarFicha()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Ficha del Odontólogo</h2>
+          <button class="btn-close" (click)="cerrarFicha()">&times;</button>
+        </div>
+  
+        <div class="modal-body">
+          <div class="detalle-section">
+            <h3>👤 Información Personal</h3>
+            <div class="detalle-row">
+              <span class="detalle-label">Nombre completo:</span>
+              <span class="detalle-value">
+                {{ odontologoSeleccionado.users.nombre }} {{ odontologoSeleccionado.users.apellido }}
+              </span>
+            </div>
+            <div class="detalle-row">
+              <span class="detalle-label">Email:</span>
+              <span class="detalle-value">{{ odontologoSeleccionado.users.email }}</span>
+            </div>
+            <div class="detalle-row">
+              <span class="detalle-label">Teléfono:</span>
+              <span class="detalle-value">{{ (odontologoSeleccionado.telefono)? odontologoSeleccionado.telefono : '-' }}</span>
+            </div>
+          </div>
+  
+          <div class="detalle-section">
+            <h3>🦷 Información Profesional</h3>
+            <div class="detalle-row">
+              <span class="detalle-label">Matrícula:</span>
+              <span class="detalle-value">{{ (odontologoSeleccionado.matricula)? odontologoSeleccionado.matricula : '-'}}</span>
+            </div>
+            <div class="detalle-row">
+              <span class="detalle-label">Especialidad:</span>
+              <span class="detalle-value">{{ (odontologoSeleccionado.descripcion)? odontologoSeleccionado.descripcion : '-' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+  
+</div>

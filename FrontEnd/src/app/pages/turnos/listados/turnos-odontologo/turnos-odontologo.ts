@@ -43,7 +43,7 @@ export class TurnosOdontologo{
   turnosPaginados: Turno[] = [];
   filtroPaciente: string = '';
   filtroFecha: string = '';
-  pageSize: number = 5;
+  pageSize: number = 10;
   currentPage: number = 1;
   totalPages: number = 1;
   cargando = false;
