@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserResponse } from '../../../../services/models/user-response';
@@ -14,6 +14,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../components/confirm-dialog-component/confirm-dialog-component';
 import { AlertBanner } from "../../../../components/banner/alert-banner/alert-banner";
 import { AlertServices } from '../../../../services/alert-services';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-turnos',
@@ -22,7 +24,7 @@ import { AlertServices } from '../../../../services/alert-services';
   styleUrls: ['./turnos-paciente.css'],
   imports: [CommonModule, FormsModule, RouterLink, AlertBanner]
 })
-export class TurnosPaciente implements OnInit {
+export class TurnosPaciente{
   private readonly userService = inject(UserServices);
   private readonly turnoService = inject(TurnoServices);
   private readonly authService = inject(AuthService);
@@ -42,39 +44,38 @@ export class TurnosPaciente implements OnInit {
   pageSize: number = 5;
   currentPage: number = 1;
   totalPages: number = 1;
-  cargando = false;
+  cargando = true;
 
   // Modal properties
   mostrarModal: boolean = false;
   turnoSeleccionado: Turno | null = null;
 
-  ngOnInit() {
-    this.currentUser()this.authService.currentUserInfo();
+  private readonly odontologos$ = this.userService.getAllOdontologos();
+  protected readonly signalOdontologos = toSignal(this.odontologos$, { initialValue: null });
 
-    this.userService.getAllOdontologos().subscribe({
-      next: (data) => {
+  constructor() {
+    effect(() => {
+      const data = this.signalOdontologos();
+      if (data) {
         this.odontologos = data;
-        this.cargando = true;
-      },
-      error: (err) => {
-        console.error('Error al cargar odontólogos:', err);
       }
     });
 
-    this.pacienteService.getPacienteByUserId(this.currentUser?.id!).subscribe({
-      next: (paciente) => {
-        this.currentPaciente = paciente;
-
-        if (!this.currentPaciente?.id) {
-          console.error('El paciente no tiene ID');
-          return;
-        }
-        
-        this.cargarTurnos(this.currentPaciente.id);
-      },
-      error: (err) => {
-        console.error('Error al obtener paciente:', err);
-        this.router.navigate(['/']);
+    effect(() => {
+      const user = this.authService.currentUserInfo();
+      if (user && user.id !== undefined) {
+        this.pacienteService.getPacienteByUserId(user.id).subscribe({
+          next: (paciente) => {
+            this.currentPaciente = paciente;
+            if (paciente?.id) {
+              this.cargarTurnos(paciente.id);
+            }
+          },
+          error: (err) => {
+            console.error('Error al cargar paciente:', err);
+            this.cargando = false;
+          }
+        });
       }
     });
   }
@@ -83,7 +84,7 @@ export class TurnosPaciente implements OnInit {
     
     this.turnoService.buscarPorPaciente(pacienteId).subscribe({
       next: (turnos) => {
-        
+        this.cargando = false;
         if (!turnos || turnos.length === 0) {
           this.turnos = [];
           this.turnosFiltrados = [];
@@ -97,6 +98,7 @@ export class TurnosPaciente implements OnInit {
         this.calcularPaginacion();
       },
       error: (err) => {
+        this.cargando = false;
         console.error('Error al recuperar turnos:', err);
         console.error('Status:', err.status);
         console.error('Message:', err.message);

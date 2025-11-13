@@ -10,11 +10,13 @@ import { PacienteService } from '../../../../services/pacientes/paciente-service
 import { Paciente } from '../../../../services/models/paciente';
 import { UserResponse } from '../../../../services/models/user-response';
 import { Router } from '@angular/router';
+import { AlertBanner } from "../../../../components/banner/alert-banner/alert-banner";
+import { AlertServices } from '../../../../services/alert-services';
 
 @Component({
   selector: 'app-nuevo-turno',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AlertBanner],
   templateUrl: './formulario-agendar-turno.html',
   styleUrls: ['./formulario-agendar-turno.css']
 })
@@ -24,6 +26,7 @@ export class FormularioAgendarTurno {
   private readonly turnoService = inject(TurnoServices);
   private readonly pacienteService = inject(PacienteService);
   private readonly router = inject(Router);
+  private readonly alertService = inject(AlertServices)
 
   odontologos: Odontologo[] = [];
   fecha: string = '';
@@ -50,12 +53,12 @@ export class FormularioAgendarTurno {
         },
         error: (err) => {
           if (err.status === 403) {
-            alert('No tienes permisos para acceder a esta información o no estás registrado como paciente.');
+            this.alertService.showMessage('No tienes permisos para acceder a esta información o no estás registrado como paciente.', 'error');
           }
         }
       });
     } else {
-      alert('Debes iniciar sesión para agendar un turno');
+      this.alertService.showMessage('Debes iniciar sesión para agendar un turno', 'error');
       this.router.navigateByUrl('/login');
     }
   }
@@ -63,7 +66,7 @@ export class FormularioAgendarTurno {
   agregarTurno(): void {
 
     if (!this.currentPaciente) {
-      alert('Error: No se pudo cargar la información del paciente');
+      this.alertService.showMessage('Error: No se pudo cargar la información del paciente', 'error');
       return;
     }
   
@@ -82,19 +85,19 @@ export class FormularioAgendarTurno {
             
             this.fecha = '';
             this.odontologoSeleccionado = null;
-            
-            alert('¡Turno agregado exitosamente!');
+            this.alertService.showMessage('¡Turno agregado exitosamente!', 'success');
+
             this.router.navigateByUrl("turnos/pacientes");
           },
           error: () => {
-            alert('Error al agregar el turno. Por favor intente nuevamente.');
+            this.alertService.showMessage('Error al agregar el turno. Por favor intente nuevamente.', 'error');
           }
         });
       } else {
-        alert('Error: No se pudo encontrar el odontólogo seleccionado');
+        this.alertService.showMessage('Error: No se pudo encontrar el odontólogo seleccionado', 'error');
       }
     } else {
-      alert('Por favor complete todos los campos');
+      this.alertService.showMessage('Por favor complete todos los campos', 'error');
     }
   }
 }
