@@ -12,6 +12,12 @@ export class TurnoServices {
   private readonly client = inject(HttpClient);
   private readonly API_URL = `${environment.apiUrl}/turnos`;
 
+  getHorasOcupadas(fecha: string, odontologoId: number) {
+    return this.client.get<any>(`${this.API_URL}/ocupados`, {
+      params: { fecha, odontologoId }
+    });
+  }
+
   listar(): Observable<Turno[]> {
     return this.client.get<Turno[]>(`${this.API_URL}/list`);
   }

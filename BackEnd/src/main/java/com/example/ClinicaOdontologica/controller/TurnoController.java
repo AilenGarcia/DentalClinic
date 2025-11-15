@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -149,6 +151,34 @@ public class TurnoController {
     }
 
 
+    /**
+     * Función para obtener una lista de horarios reservados por dia.
+     * @return Respuesta HTTP con los horarios encontrados.
+     */
+    @Operation(summary = "Obtener una lista de horarios reservados por dia", description = "Recibe una fecha y un odontologo y devuelve una lista de turnos reservados")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",description = "Devuelve una lista de horarios correspondiente"),
+            @ApiResponse(responseCode = "400", description = "Error en los datos proporcionados"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasAnyAuthority('ROLE_ODONTOLOGOS', 'ROLE_PACIENTES')")
+    @GetMapping("/ocupados")
+    public ResponseEntity<Map<String, Object>> getHorasOcupadas(
+            @RequestParam LocalDate fecha,
+            @RequestParam Integer odontologoId
+    ) {
+        List<LocalTime> horas = turnoService.obtenerHorasOcupadas(fecha, odontologoId);
 
+        List<String> resultado = horas.stream()
+                .map(h -> h.toString().substring(0,5))
+                .toList();
 
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Horarios obtenidos con éxito");
+        response.put("odontologoId", odontologoId);
+        response.put("horarios", resultado);
+
+        return ResponseEntity.ok(response);
+    }
 }

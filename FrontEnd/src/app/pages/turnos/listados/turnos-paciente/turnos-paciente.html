@@ -31,6 +31,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Fecha</th>
+                    <th>Hora</th>
                     <th>Odontólogo</th>
                     <th>Acciones</th>
                 </tr>
@@ -49,6 +50,7 @@
                         <tr>
                             <td>#{{ t.id }}</td>
                             <td>{{ t.fechaTurno.split('T')[0] }}</td>
+                            <td>{{ t.horaTurno ? t.horaTurno.substring(0,5) : '—' }}</td>
                             <td>{{ t.odontologo.users.nombre }} {{ t.odontologo.users.apellido }}</td>
                             <td>
                                 <button class="btn-ver" (click)="verDetalles(t)">Ver Detalles</button>
@@ -87,7 +89,7 @@
                     <h3>📅 Información del Turno</h3>
                     <div class="detalle-row">
                         <span class="detalle-label">Fecha:</span>
-                        <span class="detalle-value">{{ formatearFecha(turnoSeleccionado.fechaTurno) }}</span>
+                        <span class="detalle-value">{{ formatearFecha(turnoSeleccionado.fechaTurno) }} - {{turnoSeleccionado.horaTurno}}</span>
                     </div>
                     <div class="detalle-row">
                         <span class="detalle-label">ID del Turno:</span>

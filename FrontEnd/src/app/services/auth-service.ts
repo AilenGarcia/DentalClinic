@@ -69,7 +69,6 @@ export class AuthService {
       )
       .subscribe({
         next: (response) => {
-          console.log('antes', response.role)
           this.redirigirSegunRol(response.role);
         }
       });
@@ -81,7 +80,6 @@ private cargarUsuario(email: string) {
 }
 
   private redirigirSegunRol(role: string) {
-    console.log('rol',role)
     switch(role) {
       case 'ROLE_PACIENTES':
         this.router.navigateByUrl('/turnos/pacientes');

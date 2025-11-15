@@ -20,40 +20,54 @@ import { AlertServices } from '../../../../services/alert-services';
   templateUrl: './formulario-agendar-turno.html',
   styleUrls: ['./formulario-agendar-turno.css']
 })
+
 export class FormularioAgendarTurno {
   private readonly authService = inject(AuthService);
   private readonly userService = inject(UserServices);
   private readonly turnoService = inject(TurnoServices);
   private readonly pacienteService = inject(PacienteService);
   private readonly router = inject(Router);
-  private readonly alertService = inject(AlertServices)
+  private readonly alertService = inject(AlertServices);
 
   odontologos: Odontologo[] = [];
   fecha: string = '';
-  odontologoSeleccionado: Odontologo | null = null;;
+  hora: string = '';
+  odontologoSeleccionado: Odontologo | null = null;
   currentUser: UserResponse | null = null;
   currentPaciente: Paciente | null = null;
+  hoy: string = '';
+
+  listaHorarios: string[] = [
+    "10:00", "10:30", "11:00", "11:30", "12:00",
+    "16:00", "16:30", "17:00", "17:30", "18:00"
+  ];
+
+  horasOcupadas: string[] = [];
 
   ngOnInit() {
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0'); // meses 0-11
+    const dd = String(now.getDate()).padStart(2, '0');
+
+    this.hoy = `${yyyy}-${mm}-${dd}`;
+
     this.userService.getAllOdontologos().subscribe({
-      next: (data) => {
-        this.odontologos = data;
-      },
-      error: (err) => {
-        console.error('Error al cargar odontólogos', err);
-      }
+      next: data => this.odontologos = data,
+      error: err => console.error('Error cargando odontólogos', err)
     });
 
     this.currentUser = this.authService.currentUserInfo();
-    
-    if (this.currentUser && this.currentUser.id) {
+
+    if (this.currentUser?.id) {
       this.pacienteService.getPacienteByUserId(this.currentUser.id).subscribe({
-        next: (paciente) => {
-          this.currentPaciente = paciente;
-        },
-        error: (err) => {
+        next: paciente => this.currentPaciente = paciente,
+        error: err => {
           if (err.status === 403) {
-            this.alertService.showMessage('No tienes permisos para acceder a esta información o no estás registrado como paciente.', 'error');
+            this.alertService.showMessage(
+              'No tienes permisos o no estás registrado como paciente.', 
+              'error'
+            );
           }
         }
       });
@@ -63,41 +77,56 @@ export class FormularioAgendarTurno {
     }
   }
 
-  agregarTurno(): void {
+  actualizarHorasOcupadas() {
+    if (!this.fecha || !this.odontologoSeleccionado?.id) return;
 
+    this.turnoService
+      .getHorasOcupadas(this.fecha, this.odontologoSeleccionado.id)
+      .subscribe({
+        next: res => {
+          this.horasOcupadas = res.horarios; // <- backend devuelve { horarios: [] }
+        },
+        error: () => {
+          this.horasOcupadas = [];
+          this.alertService.showMessage('No se pudieron cargar los horarios ocupados', 'error');
+        }
+      });
+  }
+
+  // horarios disponibles (el select mostrará estos)
+  get horasDisponibles(): string[] {
+    return this.listaHorarios.filter(h => !this.horasOcupadas.includes(h));
+  }
+
+  agregarTurno(): void {
     if (!this.currentPaciente) {
-      this.alertService.showMessage('Error: No se pudo cargar la información del paciente', 'error');
+      this.alertService.showMessage('Error al cargar el paciente', 'error');
       return;
     }
-  
-    if (this.fecha && this.odontologoSeleccionado) {
-      
-      if (this.odontologoSeleccionado) {
-        
-        const nuevoTurno: Turno = {
-          fechaTurno: this.fecha,
-          paciente: this.currentPaciente,
-          odontologo: this.odontologoSeleccionado
-        };
-                
-        this.turnoService.agregar(nuevoTurno).subscribe({
-          next: () => {
-            
-            this.fecha = '';
-            this.odontologoSeleccionado = null;
-            this.alertService.showMessage('¡Turno agregado exitosamente!', 'success');
 
-            this.router.navigateByUrl("turnos/pacientes");
-          },
-          error: () => {
-            this.alertService.showMessage('Error al agregar el turno. Por favor intente nuevamente.', 'error');
-          }
-        });
-      } else {
-        this.alertService.showMessage('Error: No se pudo encontrar el odontólogo seleccionado', 'error');
-      }
+    if (this.fecha && this.odontologoSeleccionado) {
+      const nuevoTurno: Turno = {
+        fechaTurno: this.fecha,
+        horaTurno: this.hora,
+        paciente: this.currentPaciente,
+        odontologo: this.odontologoSeleccionado
+      };
+
+      this.turnoService.agregar(nuevoTurno).subscribe({
+        next: () => {
+          this.fecha = '';
+          this.hora = '';
+          this.odontologoSeleccionado = null;
+
+          this.alertService.showMessage('¡Turno agregado exitosamente!', 'success');
+          this.router.navigateByUrl("turnos/pacientes");
+        },
+        error: () => {
+          this.alertService.showMessage('Error al agregar turno', 'error');
+        }
+      });
     } else {
-      this.alertService.showMessage('Por favor complete todos los campos', 'error');
+      this.alertService.showMessage('Complete todos los campos', 'error');
     }
   }
 }

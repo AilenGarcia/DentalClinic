@@ -1,49 +1,71 @@
 <div class="container">
   <app-alert-banner></app-alert-banner>
-    <h1>Agendar nuevo turno</h1>
-    <p class="sub">Complete los datos para agendar un nuevo turno.</p>
 
-    <div class="form-grid">
-        <div class="form-group">
-          <label for="fecha" class="form-label">Fecha</label>
-          <input 
-            type="date" 
-            id="fecha"
-            name="fecha"
-            [(ngModel)]="fecha"
-            class="form-input"
-            required
-          />
-        </div>
-  
-        <div class="form-group">
-          <label for="odontologo" class="form-label">Odontólogo</label>
-          <select 
-            id="odontologo"
-            name="odontologo"
-            [(ngModel)]="odontologoSeleccionado"
-            class="form-select"
-            required
-          >
-            <option value="" disabled selected>Seleccione un odontólogo</option>
-            
-            @for (odontologo of odontologos; track odontologo.id) {
-                <option [ngValue]="odontologo">
-                  {{ odontologo.users.nombre }} {{ odontologo.users.apellido }}
-                </option>
-              }
-            
-          </select>
-        </div>
+  <h1>Agendar nuevo turno</h1>
+  <p class="sub">Complete los datos para agendar un nuevo turno.</p>
 
-        <button 
-            type="button" 
-            class="btn-submit" 
-            (click)="agregarTurno()"
-            [disabled]="!fecha || !odontologoSeleccionado"
-        >
-            Agregar Turno
-        </button>
+  <div class="form-grid">
+
+    <div class="form-group">
+      <label for="fecha" class="form-label">Fecha</label>
+      <input 
+        type="date"
+        id="fecha"
+        name="fecha"
+        [(ngModel)]="fecha"
+        class="form-input"
+        required
+        [min]="hoy"
+        (change)="actualizarHorasOcupadas()"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="odontologo" class="form-label">Odontólogo</label>
+      <select 
+        id="odontologo"
+        name="odontologo"
+        [(ngModel)]="odontologoSeleccionado"
+        class="form-select"
+        required
+        (change)="actualizarHorasOcupadas()"
+      >
+        <option value="" disabled selected>Seleccione un odontólogo</option>
+
+        @for (odontologo of odontologos; track odontologo.id) {
+          <option [ngValue]="odontologo">
+            {{ odontologo.users.nombre }} {{ odontologo.users.apellido }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="hora" class="form-label">Hora</label>
+      <select
+        id="hora"
+        name="hora"
+        [(ngModel)]="hora"
+        class="form-select"
+        required
+        [disabled]="!fecha || !odontologoSeleccionado"
+      >
+        <option value="" disabled selected>Seleccione un horario</option>
+
+        @for (h of horasDisponibles; track h) {
+          <option [value]="h">{{ h }}</option>
+        }
+      </select>
+    </div>
+
+    <button 
+      type="button"
+      class="btn-submit"
+      (click)="agregarTurno()"
+      [disabled]="!fecha || !odontologoSeleccionado || !hora"
+    >
+      Agregar Turno
+    </button>
+
   </div>
-    
 </div>

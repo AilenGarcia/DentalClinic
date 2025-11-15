@@ -8,6 +8,9 @@ import com.example.ClinicaOdontologica.repository.TurnoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,9 +27,26 @@ public class TurnoService {
         return turnoRepository.findById(id).orElseThrow(() -> new NotFoundException("turno no encontrado"));}
 
     public void agregarTurno(Turno turno) throws ExistenteException, BadRequestException {
-        if(Objects.isNull(turno.getFechaTurno())) throw new BadRequestException("El campo fecha esta vacio");
-        if(turnoRepository.exists(Example.of(turno))) throw new ExistenteException("El turno ya esta registrado");
-        turnoRepository.save(turno);}
+
+        if (turno.getFechaTurno() == null)
+            throw new BadRequestException("El campo fecha está vacío");
+
+        if (turno.getHoraTurno() == null)
+            throw new BadRequestException("El campo hora está vacío");
+
+        boolean existe = turnoRepository.existsByFechaTurnoAndHoraTurnoAndOdontologo_Id(
+                turno.getFechaTurno(),
+                turno.getHoraTurno(),
+                turno.getOdontologo().getId()
+        );
+
+        if (existe) {
+            throw new ExistenteException("El odontólogo ya tiene un turno asignado en ese horario");
+        }
+
+        turnoRepository.save(turno);
+    }
+
 
     public List<Turno> listar(){return turnoRepository.findAll();}
 
@@ -39,4 +59,9 @@ public class TurnoService {
         List<Turno> turnos = turnoRepository.findByPacienteId(id);
         return turnos;
     }
+
+    public List<LocalTime> obtenerHorasOcupadas(LocalDate fecha, Integer odontologoId) {
+        return turnoRepository.findHorasOcupadas(fecha, odontologoId);
+    }
+
 }

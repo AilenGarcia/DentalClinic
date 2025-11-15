@@ -236,6 +236,7 @@ export class TurnosOdontologo{
 
       const turnosParaImprimir = this.turnosFiltrados.map(t => ({
         fecha: t.fechaTurno,
+        hora: t.horaTurno,
         nombrePaciente: `${t.paciente?.users.nombre} ${t.paciente?.users.apellido}`,
         dni: t.paciente?.dni,
         email: t.paciente?.users.email,
@@ -246,6 +247,7 @@ export class TurnosOdontologo{
         type: 'json',
         properties: [
           { field: 'fecha', displayName: 'Fecha del Turno' },
+          { field: 'hora', displayName: 'Hora del Turno' },
           { field: 'nombrePaciente', displayName: 'Paciente' },
           { field: 'dni', displayName: 'DNI' },
           { field: 'email', displayName: 'Email' },

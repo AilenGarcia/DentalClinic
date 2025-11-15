@@ -30,6 +30,7 @@
             <thead>
                 <tr>
                     <th>Fecha</th>
+                    <th>Hora</th>
                     <th>Pacientes</th>
                     <th>Acciones</th>
                 </tr>
@@ -47,6 +48,7 @@
                     @for (t of turnosPaginados; track t.id) {
                         <tr>
                             <td>{{ t.fechaTurno.split('T')[0] }}</td>
+                            <td>{{t.horaTurno}}</td>
                             <td>{{ t.paciente.users.nombre }} {{ t.paciente.users.apellido }}</td>
                             <td>
                                 <button class="btn-ver" (click)="verDetalles(t)">Ver Detalles</button>
@@ -85,7 +87,7 @@
                     <h3>📅 Información del Turno</h3>
                     <div class="detalle-row">
                         <span class="detalle-label">Fecha:</span>
-                        <span class="detalle-value">{{ formatearFecha(turnoSeleccionado.fechaTurno) }}</span>
+                        <span class="detalle-value">{{ formatearFecha(turnoSeleccionado.fechaTurno) }}  -  {{turnoSeleccionado.horaTurno}}</span>
                     </div>
                     <div class="detalle-row">
                         <span class="detalle-label">ID del Turno:</span>
