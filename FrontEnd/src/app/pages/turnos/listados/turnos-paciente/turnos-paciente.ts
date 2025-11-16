@@ -91,7 +91,16 @@ export class TurnosPaciente{
           return;
         }
 
-        this.turnos = turnos;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); 
+
+        this.turnos = turnos.filter(t => {
+          const [y, m, d] = t.fechaTurno.split('-').map(Number);
+          const fecha = new Date(y, m - 1, d);
+        
+          return fecha >= today;
+        });
+
         this.turnosFiltrados = [...this.turnos];
         
         this.calcularPaginacion();

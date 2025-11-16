@@ -12,6 +12,7 @@ import { TurnosOdontologo } from './pages/turnos/listados/turnos-odontologo/turn
 import { publicOnlyGuard } from './core/guards/public-only-guard';
 import { authGuard } from './core/guards/auth/auth-guard';
 import { FormularioAgendarTurno } from './pages/turnos/new/formulario-agendar-turno/formulario-agendar-turno';
+import { Pacientes } from './pages/pacientes/pacientes';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -25,6 +26,7 @@ export const routes: Routes = [
                 ]
             },
             {path: 'odontologos', component: Odontologos, title: 'Listado de odontólogos', canActivate:[authGuard]},
+            {path: 'pacientes', component: Pacientes, title: 'Listado de pacientes', canActivate:[authGuard]},
             {path: 'edit', component: EditPaciente, title: 'Modificar perfil', canActivate:[authGuard]},
             {path: 'editOdontologo', component: EditOdontologo, title: 'Modificar perfil', canActivate:[authGuard]}
         ]

@@ -1,0 +1,82 @@
+<div class="container">
+    <h1>Pacientes</h1>
+    <p class="sub">Consulta nuestros pacientes registrados.</p>
+    
+    @if (true) {
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(pacientesPaginados.length === 0){
+                    <p>No se encuentran pacientes disponibles.</p>
+                } @else {
+                    @for (p of pacientesPaginados; track p.id) {
+                        <tr>
+                            <td>{{ p.users.nombre }} {{ p.users.apellido }}</td>
+                            <td>{{ p.users.email }}</td>
+                            <td>{{ p.telefono }}</td>
+                            <td>
+                                <button class="btn-ver" (click)="verFichaCompleta(p)">Ver Ficha Completa</button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <div class="paginacion">
+            <button (click)="paginaAnterior()" [disabled]="currentPage === 1">Anterior</button>
+            <span>Página {{currentPage}} de {{totalPages}}</span>
+            <button (click)="paginaSiguiente()" [disabled]="currentPage === totalPages">Siguiente</button>
+        </div>  
+    } @else {
+        <div class="loading">
+            <span class="spinner"></span> Cargando pacientes...
+        </div>
+    }
+    
+    <!-- Modal de ficha del paciente -->
+    @if (mostrarFicha && pacienteSeleccionado) {
+        <div class="modal-overlay" (click)="cerrarFicha()">
+            <div class="modal-content" (click)="$event.stopPropagation()">
+                <div class="modal-header">
+                    <h2>Ficha del Paciente</h2>
+                    <button class="btn-close" (click)="cerrarFicha()">&times;</button>
+                </div>
+        
+                <div class="modal-body">
+                    <div class="detalle-section">
+                        <h3>👤 Información Personal</h3>
+                        <div class="detalle-row">
+                            <span class="detalle-label">Nombre completo:</span>
+                            <span class="detalle-value">
+                                {{ pacienteSeleccionado.users.nombre }} {{ pacienteSeleccionado.users.apellido }}
+                            </span>
+                        </div>
+                        <div class="detalle-row">
+                            <span class="detalle-label">Email:</span>
+                            <span class="detalle-value">{{ pacienteSeleccionado.users.email }}</span>
+                        </div>
+                        <div class="detalle-row">
+                            <span class="detalle-label">Teléfono:</span>
+                            <span class="detalle-value">{{ pacienteSeleccionado.telefono }}</span>
+                        </div>
+                        <div class="detalle-row">
+                            <span class="detalle-label">DNI:</span>
+                            <span class="detalle-value">{{ pacienteSeleccionado.dni }}</span>
+                        </div>
+                        <div class="detalle-row">
+                            <span class="detalle-label">Domicilio:</span>
+                            <span class="detalle-value">{{ pacienteSeleccionado.domicilio }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

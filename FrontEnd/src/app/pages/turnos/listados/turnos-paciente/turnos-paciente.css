@@ -149,7 +149,7 @@ h1 {
 /* Distribución de columnas - ocupan todo el ancho */
 .tabla th:nth-child(1),
 .tabla td:nth-child(1) {
-  width: 10%; /* ⭐ ID - más compacto */
+  width: 10%;
   text-align: center;
   font-weight: 600;
   color: #6b7280;
@@ -158,17 +158,24 @@ h1 {
 
 .tabla th:nth-child(2),
 .tabla td:nth-child(2) {
-  width: 25%; /* ⭐ Fecha */
+  width: 30%;
+  text-align: center;
 }
 
 .tabla th:nth-child(3),
 .tabla td:nth-child(3) {
-  width: 45%; /* ⭐ Odontólogo - más espacio */
+  width: 10%;
 }
 
 .tabla th:nth-child(4),
 .tabla td:nth-child(4) {
-  width: 20%; /* ⭐ Acciones */
+  width: 30%; 
+  text-align: center;
+}
+
+.tabla th:nth-child(5),
+.tabla td:nth-child(5) {
+  width: 20%; 
   text-align: center;
 }
 
