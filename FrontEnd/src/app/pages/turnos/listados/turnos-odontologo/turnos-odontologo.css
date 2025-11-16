@@ -163,7 +163,7 @@
   .tabla tbody tr:hover {
     background: #f9fafb;
   }
-  
+
   .tabla td {
     padding: 16px 24px;
     font-size: 0.9375rem;
@@ -185,9 +185,11 @@
     margin-bottom: 32px;
   }
   
-  td.empty {
-    height: 4rem;
-    font-size: large;
+  .tabla td.empty {
+    text-align: center;
+    font-weight: 600;
+    color: #6b7280;
+    font-family: 'Courier New', monospace;
   }
 
   .spinner {
