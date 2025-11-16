@@ -54,7 +54,7 @@ findByIdPaciente(id: number){
         this.alertService.showMessage('Odontologo actualizado correctamente. Usted será redirigido al inicio', 'success');
 
         setTimeout(() => {
-          this.router.navigate(['/odontologos']);
+          this.router.navigate(['/turnos/odontologos']);
         }, 2000);
       },
       error: (err) => {
@@ -76,7 +76,7 @@ findByIdPaciente(id: number){
         this.alertService.showMessage('Paciente actualizado correctamente. Usted será redirigido al inicio', 'success');
 
         setTimeout(() => {
-          this.router.navigate(['/pacientes']);
+          this.router.navigate(['/turnos//pacientes']);
         }, 2000);
       },
       error: (err) => {
