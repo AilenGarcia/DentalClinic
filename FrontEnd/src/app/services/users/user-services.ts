@@ -76,7 +76,7 @@ findByIdPaciente(id: number){
         this.alertService.showMessage('Paciente actualizado correctamente. Usted será redirigido al inicio', 'success');
 
         setTimeout(() => {
-          this.router.navigate(['/turnos//pacientes']);
+          this.router.navigate(['/turnos/pacientes']);
         }, 2000);
       },
       error: (err) => {
