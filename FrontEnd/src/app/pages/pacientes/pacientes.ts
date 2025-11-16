@@ -2,6 +2,7 @@ import { Component, effect, inject } from '@angular/core';
 import { UserServices } from '../../services/users/user-services';
 import { Paciente } from '../../services/models/paciente';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { TurnoServices } from '../../services/turnos/turno-services';
 
 @Component({
   selector: 'app-pacientes',
@@ -11,6 +12,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class Pacientes {
   private readonly userService = inject(UserServices);
+  private readonly turnoService = inject(TurnoServices)
+
   pacientes: Paciente[] = [];
   pacientesPaginados: Paciente[] = [];
   pageSize: number = 5;
@@ -20,10 +23,11 @@ export class Pacientes {
   // Modal properties
   mostrarFicha: boolean = false;
   pacienteSeleccionado: Paciente | null = null;
+  turnosAnterioresAHoy: Number | null = null;
   
   private readonly pacientes$ = this.userService.getAllPacientes();
   protected readonly signalPacientes = toSignal(this.pacientes$, { initialValue: null });
-  
+
   constructor() {
     effect(() => {
       const data = this.signalPacientes();
@@ -47,7 +51,24 @@ export class Pacientes {
   
   verFichaCompleta(paciente: Paciente) {
     this.pacienteSeleccionado = paciente;
+    this.calcularTurnosPorPaciente(paciente);
     this.mostrarFicha = true;
+  }
+
+  calcularTurnosPorPaciente(paciente: Paciente) {
+    this.turnoService.buscarPorPaciente(paciente.id!).subscribe({
+      next: (turnos) => {
+    
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
+    
+        this.turnosAnterioresAHoy = turnos.filter(t => {
+          const [y, m, d] = t.fechaTurno.split('-').map(Number);
+          const fecha = new Date(y, m - 1, d);
+          return fecha < hoy;
+        }).length;
+      }
+    });
   }
   
   cerrarFicha() {
