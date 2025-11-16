@@ -102,7 +102,7 @@ private cargarUsuario(email: string) {
   }
 
   isAuthenticated(): boolean {
-    return !!this.token;
+    return !!this.token && !!this.userInfo() && !!this.currentUser();
   }
 
   hasRole(role: string): boolean {
