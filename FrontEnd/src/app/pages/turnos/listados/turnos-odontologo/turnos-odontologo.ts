@@ -150,7 +150,7 @@ export class TurnosOdontologo{
     }
   
     calcularPaginacion() {
-      this.totalPages = Math.ceil(this.turnosFiltrados.length / this.pageSize);
+      this.totalPages = Math.ceil(this.turnosFiltrados.length / this.pageSize) || 1;
       this.actualizarPagina();
     }
   
