@@ -90,7 +90,7 @@ handleSubmit() {
 
   this.client.changePassword(data).subscribe({
     next: () => {
-      this.alertService.showMessage('Usuario registrado correctamente. Usted será redirigido al login', 'success');
+      this.alertService.showMessage('Contraseña modificada exitosamente', 'success');
 
         setTimeout(() => {
           this.close()
