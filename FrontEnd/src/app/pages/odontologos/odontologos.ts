@@ -19,6 +19,7 @@ export class Odontologos {
   pageSize: number = 5;
   currentPage: number = 1;
   totalPages: number = 1;
+  cargando = true;
 
   // Modal properties
     mostrarFicha: boolean = false;
@@ -33,6 +34,7 @@ export class Odontologos {
         if (data) {
           this.odontologos = data;
           this.calcularPaginacion();
+          this.cargando = false;
         }
       });
   }

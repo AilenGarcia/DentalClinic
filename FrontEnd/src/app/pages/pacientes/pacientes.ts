@@ -19,6 +19,7 @@ export class Pacientes {
   pageSize: number = 5;
   currentPage: number = 1;
   totalPages: number = 1;
+  cargando = true;
   
   // Modal properties
   mostrarFicha: boolean = false;
@@ -34,6 +35,7 @@ export class Pacientes {
       if (data) {
         this.pacientes = data;
         this.calcularPaginacion();
+        this.cargando = false;
       }
     });
   }

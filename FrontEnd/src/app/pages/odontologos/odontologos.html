@@ -2,7 +2,7 @@
     <h1>Odontólogos</h1>
     <p class="sub">Consulta nuestros odontólogos disponibles.</p>
     
-    @if (true) {
+    @if (!this.cargando) {
         <table class="tabla">
             <thead>
                 <tr>
@@ -14,7 +14,11 @@
             </thead>
             <tbody>
                 @if(odontologosPaginados.length === 0){
-                    <p>No se encuentran odontólogos disponibles.</p>
+                    <tr>
+                      <td class="empty" colspan="4">
+                        No hay pacientes registrados.
+                      </td>
+                    </tr>
                 } @else {
                     @for (o of odontologosPaginados; track o.id) {
                         <tr>
